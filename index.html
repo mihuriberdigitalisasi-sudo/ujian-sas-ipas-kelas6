@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ekspedisi Pengetahuan — SAS IPAS Kelas VI</title>
+<style>
+:root{--ink:#f5f7ff;--muted:#b8c5d9;--gold:#ffd166;--cyan:#72e5e0;--panel:rgba(11,25,49,.88);--line:rgba(255,255,255,.14);--green:#62e6a5;--red:#ff7d88}
+*{box-sizing:border-box}body{margin:0;color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,sans-serif;background:#08152b;min-height:100vh}
+#scene{position:fixed;inset:0;width:100%;height:100%;z-index:-2}body:before{content:"";position:fixed;inset:0;background:linear-gradient(110deg,rgba(4,12,27,.75),rgba(5,25,44,.45));z-index:-1}
+.wrap{width:min(1120px,94vw);margin:auto;padding:22px 0 40px}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:18px}.brand{display:flex;align-items:center;gap:12px}.logo{width:48px;height:48px;border-radius:15px;background:linear-gradient(135deg,#ffd166,#ff8f70);display:grid;place-items:center;color:#17213b;font-size:25px;box-shadow:0 8px 30px #ffb84d55}.brand small{display:block;color:var(--muted);letter-spacing:.13em;font-weight:700;font-size:10px}.brand b{font-size:17px}.pill{border:1px solid var(--line);background:#07162cbf;border-radius:999px;padding:9px 13px;font-size:13px;color:var(--muted)}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:24px;box-shadow:0 25px 70px #0006;backdrop-filter:blur(16px);padding:clamp(18px,3vw,32px)}
+.hero{display:grid;grid-template-columns:1.1fr .9fr;gap:25px;align-items:center;min-height:510px}.eyebrow{color:var(--gold);font-size:12px;font-weight:800;letter-spacing:.18em;text-transform:uppercase}.hero h1{font-size:clamp(34px,5vw,58px);line-height:1.02;margin:12px 0}.hero p{color:#c6d3e5;line-height:1.7;max-width:620px}.hero-art{height:330px;border-radius:24px;background:linear-gradient(160deg,#174f69,#14354d 55%,#162a42);position:relative;overflow:hidden;border:1px solid #ffffff20}.sun{position:absolute;width:92px;height:92px;border-radius:50%;background:#ffd166;right:15%;top:12%;box-shadow:0 0 65px #ffd16688}.mount{position:absolute;bottom:0;width:0;height:0;border-left:180px solid transparent;border-right:180px solid transparent;border-bottom:220px solid #286c72}.mount.m2{left:32%;border-left-width:210px;border-right-width:210px;border-bottom-width:170px;border-bottom-color:#1d5266}.ground{position:absolute;bottom:0;height:75px;background:linear-gradient(#287b65,#104b49);width:100%}.explorer{position:absolute;bottom:52px;left:43%;font-size:76px;filter:drop-shadow(0 12px 5px #0006);animation:bob 1.4s infinite ease-in-out}.spark{position:absolute;color:#fff2a8;font-size:23px;animation:twinkle 2s infinite}.s1{top:35%;left:20%}.s2{top:22%;left:62%;animation-delay:.6s}.s3{top:52%;right:13%;animation-delay:1s}
+@keyframes bob{50%{transform:translateY(-12px) rotate(-3deg)}}@keyframes twinkle{50%{opacity:.25;transform:scale(.7)}}
+.field{display:grid;gap:7px;margin:14px 0}.field label{font-size:13px;color:#d4dfed;font-weight:700}.field input,.field select,.answerText{width:100%;border:1px solid #ffffff25;background:#07172c;color:white;border-radius:12px;padding:13px 14px;font:inherit;outline:none}.field input:focus,.answerText:focus{border-color:var(--cyan);box-shadow:0 0 0 3px #72e5e022}
+.btn{border:0;border-radius:13px;padding:13px 18px;font-weight:800;font-size:14px;cursor:pointer;background:linear-gradient(135deg,#ffd166,#ff9f68);color:#17213b;box-shadow:0 8px 22px #ffad4d30;transition:.2s}.btn:hover{transform:translateY(-2px);filter:brightness(1.06)}.btn.secondary{background:#173653;color:#e9f4ff;border:1px solid #ffffff22;box-shadow:none}.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}.note{font-size:12px;color:var(--muted);line-height:1.6}.hidden{display:none!important}
+.gamehead{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}.stats{display:flex;gap:8px;flex-wrap:wrap}.stat{background:#07182c;border:1px solid var(--line);padding:9px 12px;border-radius:12px;font-size:13px}.stat b{color:var(--gold)}.progress{height:9px;background:#ffffff16;border-radius:99px;overflow:hidden;margin:12px 0 20px}.progress>div{height:100%;background:linear-gradient(90deg,#62e6a5,#72e5e0);width:0;transition:width .35s}
+.zone{display:flex;align-items:center;gap:12px;margin-bottom:12px}.zoneicon{width:48px;height:48px;border-radius:15px;background:#ffffff12;display:grid;place-items:center;font-size:25px}.zone small{color:var(--cyan);font-weight:800;letter-spacing:.12em}.zone h2{margin:2px 0;font-size:22px}.qmeta{color:var(--muted);font-size:12px;margin-bottom:10px}.question{font-size:clamp(18px,2.2vw,23px);line-height:1.48;font-weight:750;margin:12px 0 18px}.options{display:grid;grid-template-columns:1fr 1fr;gap:10px}.opt{border:1px solid #ffffff22;background:#102b47;border-radius:14px;padding:14px;text-align:left;color:#edf6ff;font:inherit;cursor:pointer;line-height:1.45;display:flex;gap:10px;align-items:flex-start}.opt:hover{border-color:#72e5e0}.opt.selected{border-color:var(--gold);background:#5a4825aa}.letter{flex:none;width:26px;height:26px;border-radius:8px;background:#ffffff16;display:grid;place-items:center;font-weight:900;color:var(--gold)}.answerText{min-height:105px;resize:vertical}.actions{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:20px;flex-wrap:wrap}.feedback{margin-top:14px;padding:12px 14px;border-radius:12px;background:#ffffff0c;color:#dce9f8;font-size:13px;line-height:1.6}.feedback.good{border:1px solid #62e6a566}.feedback.bad{border:1px solid #ff7d8866}
+.mapgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:9px;margin:16px 0}.maptile{padding:12px 8px;text-align:center;border:1px solid var(--line);border-radius:14px;background:#ffffff0a;font-size:12px}.maptile b{display:block;font-size:20px;margin-bottom:4px}.resultbig{font-size:48px;font-weight:900;color:var(--gold)}.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0}.summary>div{background:#ffffff0b;border:1px solid var(--line);padding:14px;border-radius:14px}.summary strong{display:block;font-size:22px}.summary span{font-size:11px;color:var(--muted)}
+@media(max-width:760px){.hero{grid-template-columns:1fr}.hero-art{height:230px;order:-1}.explorer{font-size:58px}.options{grid-template-columns:1fr}.mapgrid{grid-template-columns:repeat(2,1fr)}.top{align-items:flex-start}.pill{font-size:11px}.summary{grid-template-columns:1fr 1fr}.hero{min-height:auto}}
+</style>
+</head>
+<body>
+<canvas id="scene"></canvas>
+<div class="wrap">
+<header class="top"><div class="brand"><div class="logo">✦</div><div><small>UJIAN SUMATIF AKHIR SEMESTER</small><b>EKSPEDISI PENGETAHUAN</b></div></div><div class="pill">IPAS • KELAS VI • GANJIL 2026/2027</div></header>
+<section id="start" class="panel hero">
+ <div><div class="eyebrow">Misi khusus • 90 menit</div><h1>Jelajahi Dunia<br><span style="color:var(--gold)">Pengetahuan!</span></h1>
+ <p>Masuki ekspedisi seru melewati empat wilayah tantangan. Kumpulkan bintang dengan menjawab soal secara teliti. Selesaikan 40 soal untuk menuntaskan ujian.</p>
+ <div class="mapgrid"><div class="maptile"><b>🫁</b>Sistem Pernapasan</div><div class="maptile"><b>🍎</b>Sistem Pencernaan</div><div class="maptile"><b>⚔️</b>Pahlawan</div><div class="maptile"><b>🌿</b>Kearifan Lokal</div></div>
+ <div class="field"><label for="student">Nama lengkap siswa</label><input id="student" maxlength="80" placeholder="Masukkan nama lengkap"></div>
+ <div class="field"><label for="classroom">Kelas</label><select id="classroom"><option value="">Pilih kelas</option><option>VI-A</option><option>VI-B</option><option>VI-C</option><option>VI</option></select></div>
+ <button class="btn" id="begin">🚀 Mulai Ekspedisi Ujian</button>
+ <p class="note">Kerjakan sendiri dengan jujur. Pilihan ganda kompleks dapat memiliki lebih dari satu jawaban benar. Soal uraian akan disimpan untuk diperiksa guru. Setelah selesai, tekan tombol Simpan Nilai agar hasil masuk ke database sekolah.</p></div>
+ <div class="hero-art"><div class="sun"></div><div class="mount"></div><div class="mount m2"></div><div class="ground"></div><div class="explorer">🧑‍🚀</div><span class="spark s1">✦</span><span class="spark s2">✧</span><span class="spark s3">✦</span></div>
+</section>
+<section id="exam" class="panel hidden">
+ <div class="gamehead"><div class="zone"><div class="zoneicon" id="zoneIcon">🍎</div><div><small id="zoneLabel">ZONA 1</small><h2 id="zoneName">Lembah Pencernaan</h2></div></div><div class="stats"><div class="stat">⏱ <b id="timer">90:00</b></div><div class="stat">⭐ Skor <b id="score">0</b></div><div class="stat">📍 <b id="counter">1/40</b></div></div></div>
+ <div class="progress"><div id="bar"></div></div>
+ <div class="qmeta" id="qmeta">PILIHAN GANDA • SOAL 1</div><div class="question" id="question"></div><div id="answerArea"></div>
+ <div id="feedback" class="feedback hidden"></div>
+ <div class="actions"><button class="btn secondary" id="prev">← Sebelumnya</button><span class="note" id="hint">Pilih jawaban terbaik.</span><button class="btn" id="next">Simpan jawaban & lanjut →</button></div>
+</section>
+<section id="finish" class="panel hidden">
+ <div class="eyebrow">Ekspedisi selesai</div><h1 style="margin:8px 0">Hebat, <span id="doneName" style="color:var(--gold)"></span>!</h1><p class="note">Semua jawaban telah direkap. Tekan tombol Simpan Nilai agar hasil ujian dikirim ke Firebase Cloud.</p>
+ <div class="resultbig" id="percent">—</div><div class="summary"><div><strong id="objScore">0/80</strong><span>Skor objektif sementara (maks. 70)</span></div><div><strong id="answered">40/40</strong><span>Soal dijawab</span></div><div><strong id="essayCount">5</strong><span>Uraian menunggu koreksi</span></div></div>
+ <div class="feedback">Nilai objektif dihitung otomatis dari pilihan ganda, pilihan ganda kompleks, dan isian singkat. Lima jawaban uraian disimpan lengkap dan perlu dinilai guru agar nilai akhir maksimal 100 dapat ditetapkan secara adil.</div>
+ <div class="actions"><button class="btn secondary" id="review">Tinjau jawaban</button><button class="btn" id="save">☁️ Simpan Nilai ke Firebase</button></div><div id="saveStatus" class="feedback hidden"></div>
+</section>
+<footer class="note" style="text-align:center;margin-top:18px">Media Ujian IPAS Kelas VI • SAS Ganjil 2026/2027</footer>
+</div>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+// KONFIGURASI FIREBASE: isi dengan konfigurasi Web App dari Firebase Console.
+const firebaseConfig = {
+ apiKey: "AIzaSyA7SdLtfLGZU-jh9MFt0_nDsJWc_gktXNk",
+ authDomain: "jejak-pahlawan-mihuri.firebaseapp.com",
+ databaseURL: "https://jejak-pahlawan-mihuri-default-rtdb.asia-southeast1.firebasedatabase.app",
+ projectId: "jejak-pahlawan-mihuri",
+ storageBucket: "jejak-pahlawan-mihuri.firebasestorage.app",
+ messagingSenderId: "503390306280",
+ appId: "1:503390306280:web:3ec922450ce03172432e5d"
+};
+const firebaseReady = !Object.values(firebaseConfig).some(v=>String(v).startsWith("ISI_"));
+let app=null,auth=null,db=null;
+if(firebaseReady){try{app=initializeApp(firebaseConfig);auth=getAuth(app);db=getDatabase(app)}catch(e){console.error(e)}}
+
+const Q=[
+{t:"pg",z:1,q:"Rani mengunyah nasi cukup lama. Nasi terasa sedikit manis setelah beberapa saat. Perubahan tersebut terjadi karena enzim ... di dalam mulut mengubah amilum menjadi gula yang lebih sederhana.",o:["Pepsin","Ptialin (amilase)","Tripsin","Lipase"],a:[1],e:"Enzim ptialin atau amilase dalam air liur mulai memecah amilum menjadi gula yang lebih sederhana."},
+{t:"pg",z:1,q:"Seorang anak mengalami iritasi pada bagian saluran pernapasan yang memiliki rambut getar dan menghasilkan lendir. Fungsi utama bagian tersebut adalah ...",o:["Menyerap sari-sari makanan","Menyaring debu dan kotoran dari udara","Memompa darah ke seluruh tubuh","Menghasilkan suara"],a:[1],e:"Lendir menangkap partikel, sedangkan silia membantu menggerakkan kotoran keluar dari saluran napas."},
+{t:"pg",z:1,q:"Makanan yang telah dikunyah dan bercampur air liur akan melewati organ yang menghubungkan mulut dengan lambung, yaitu ...",o:["Kerongkongan","Usus besar","Hati","Pankreas"],a:[0],e:"Kerongkongan menyalurkan makanan dari mulut menuju lambung melalui gerak peristaltik."},
+{t:"pg",z:1,q:"Di alveolus terjadi pertukaran gas. Oksigen bergerak dari udara alveolus ke kapiler darah karena ...",o:["Oksigen dipompa oleh jantung ke alveolus","Perbedaan konsentrasi atau tekanan parsial gas","Alveolus mendorong darah keluar","Karbon dioksida menarik oksigen dengan magnet"],a:[1],e:"Gas berdifusi dari daerah dengan tekanan parsial lebih tinggi menuju lebih rendah melalui dinding alveolus yang tipis."},
+{t:"pg",z:1,q:"Kegiatan yang paling langsung membantu meningkatkan kapasitas dan kebugaran paru-paru jika dilakukan teratur adalah ...",o:["Duduk bermain gawai sepanjang hari","Olahraga aerobik seperti bersepeda atau berenang","Tidur larut malam","Menghindari semua aktivitas fisik"],a:[1],e:"Aktivitas aerobik teratur melatih kerja jantung dan paru-paru."},
+{t:"pg",z:1,q:"Dito sering berada di ruangan tertutup saat anggota keluarganya merokok. Bahaya yang mungkin dialami Dito adalah ...",o:["Paru-parunya menjadi lebih kuat","Terpapar zat berbahaya yang meningkatkan risiko gangguan pernapasan","Tubuh kebal terhadap asap","Oksigen dalam darah selalu bertambah"],a:[1],e:"Perokok pasif menghirup zat berbahaya dalam asap rokok yang dapat merusak saluran napas dan paru-paru."},
+{t:"pg",z:1,q:"Pada persimpangan saluran makanan dan udara di tenggorokan, bagian yang membantu menutup jalan napas ketika menelan agar makanan tidak masuk ke trakea adalah ...",o:["Epiglotis","Alveolus","Diafragma","Bronkiolus"],a:[0],e:"Epiglotis menutup jalan masuk ke laring saat proses menelan."},
+{t:"pg",z:1,q:"Urutan jalannya udara saat inspirasi yang benar adalah ...",o:["Hidung–laring–faring–trakea–bronkus–alveolus","Hidung–faring–laring–trakea–bronkus–bronkiolus–alveolus","Hidung–trakea–kerongkongan–bronkus–alveolus","Hidung–bronkus–laring–trakea–alveolus"],a:[1],e:"Udara melewati hidung, faring, laring, trakea, bronkus, bronkiolus, lalu alveolus."},
+{t:"pg",z:1,q:"Pangeran Diponegoro memimpin perlawanan besar terhadap Belanda di Jawa pada tahun 1825–1830. Bentuk perjuangan yang dikenal dari tokoh tersebut adalah ...",o:["Perang Jawa melawan pemerintah kolonial Belanda","Mendirikan organisasi Budi Utomo","Memimpin perang di Maluku melawan Portugis","Menyusun teks proklamasi"],a:[0],e:"Pangeran Diponegoro memimpin Perang Jawa (1825–1830) melawan Belanda."},
+{t:"pg",z:1,q:"Seorang tokoh dari Indonesia Timur memimpin perlawanan rakyat Maluku terhadap Belanda pada awal abad ke-19. Tokoh yang dimaksud adalah ...",o:["Tuanku Imam Bonjol","Pattimura","Ki Hajar Dewantara","R.A. Kartini"],a:[1],e:"Pattimura atau Thomas Matulessy memimpin perlawanan di Maluku pada 1817."},
+{t:"pg",z:1,q:"Masyarakat menjaga hutan, mengatur pemanfaatan air, dan mengambil hasil alam secukupnya berdasarkan aturan turun-temurun. Kebiasaan tersebut menunjukkan pengertian ...",o:["Modernisasi","Kearifan lokal","Urbanisasi","Industrialisasi"],a:[1],e:"Kearifan lokal adalah nilai, pengetahuan, dan kebiasaan masyarakat yang diwariskan dan menjadi pedoman hidup."},
+{t:"pg",z:1,q:"Manakah kegiatan yang merupakan tradisi lisan atau kesenian bertema lingkungan?",o:["Cerita rakyat yang mengajarkan menjaga hutan dan mata air","Lomba balap kendaraan","Pembuatan gedung bertingkat","Permainan digital tanpa tema budaya"],a:[0],e:"Cerita rakyat, tembang, atau pertunjukan tradisional dapat menyampaikan pesan menjaga alam."},
+{t:"pg",z:1,q:"Sistem pengairan sawah tradisional di Bali yang mengatur pembagian air melalui organisasi petani disebut ...",o:["Sasi","Subak","Mapalus","Pela"],a:[1],e:"Subak merupakan sistem pengelolaan irigasi dan organisasi petani di Bali."},
+{t:"pg",z:1,q:"Sekelompok remaja ingin melestarikan batik. Tindakan paling efektif dan nyata adalah ...",o:["Menganggap batik sudah ketinggalan zaman","Belajar membatik, mengenal motif, dan memakai produk batik","Menyimpan semua kain batik agar tidak dipakai","Mengganti motif batik dengan merek luar"],a:[1],e:"Belajar, menggunakan, dan mempromosikan batik membantu menjaga keterampilan serta keberlanjutan budaya."},
+{t:"pg",z:1,q:"Filosofi hidup masyarakat Sunda/Baduy yang menekankan keselarasan hubungan manusia dengan alam tercermin dalam sikap ...",o:["Mengambil sumber daya sebanyak-banyaknya","Menjaga hutan dan tidak merusak alam","Membuang sampah ke sungai","Membuka lahan tanpa aturan"],a:[1],e:"Pikukuh karuhun dan aturan adat mengajarkan hidup sederhana serta menjaga keseimbangan alam."},
+{t:"pg",z:1,q:"Rumah adat yang menggunakan bahan ringan, sambungan kayu yang lentur, dan konstruksi yang sesuai kondisi lingkungan merupakan contoh kearifan lokal ...",o:["Nonfisik berupa nasihat","Fisik atau material berupa arsitektur tradisional","Bahasa daerah","Upacara adat"],a:[1],e:"Bangunan tradisional merupakan wujud kearifan lokal fisik. Ketahanan gempa bergantung pada desain dan mutu konstruksinya."},
+{t:"pg",z:1,q:"Makanan dikunyah oleh gigi, dibolak-balik lidah, lalu bercampur air liur. Proses yang terjadi di mulut tersebut adalah ...",o:["Pencernaan mekanis dan kimiawi","Penyerapan air","Pembentukan feses","Penyerapan oksigen"],a:[0],e:"Gigi melakukan pencernaan mekanis, sedangkan enzim air liur memulai pencernaan kimiawi."},
+{t:"pg",z:1,q:"Arif sering makan terburu-buru dan kurang mengunyah sehingga perutnya terasa tidak nyaman. Kebiasaan yang sebaiknya dilakukan adalah ...",o:["Makan lebih cepat","Mengunyah makanan dengan baik dan makan teratur","Langsung berlari setelah makan","Mengurangi minum air sepanjang hari"],a:[1],e:"Mengunyah dengan baik membantu proses pencernaan dan makan perlahan membuat tubuh lebih nyaman."},
+{t:"pg",z:1,q:"Beberapa siswa mengalami diare setelah memakan makanan yang tidak higienis dan tercemar bakteri. Penyebab gangguan tersebut adalah ...",o:["Infeksi mikroorganisme pada saluran pencernaan","Kekurangan oksigen di alveolus","Kerusakan tulang","Kurang tidur saja"],a:[0],e:"Bakteri patogen dari makanan tercemar dapat menyebabkan infeksi saluran pencernaan dan diare."},
+{t:"pg",z:1,q:"Bekal sekolah yang paling memenuhi prinsip gizi seimbang dan aman adalah ...",o:["Mi instan saja dan minuman bersoda","Nasi, ikan/telur, sayur, buah, dan air putih dalam wadah bersih","Permen dan keripik saja","Makanan yang dibiarkan terbuka semalaman"],a:[1],e:"Menu beragam menyediakan karbohidrat, protein, vitamin, mineral, serat, dan air serta perlu disimpan higienis."},
+{t:"pgc",z:2,q:"Perhatikan kebiasaan berikut. Pilih SEMUA yang dapat menyebabkan gangguan pada sistem pencernaan.",o:["Jarang makan sayur dan buah","Mencuci tangan sebelum makan","Makan terburu-buru dan tidak mengunyah baik","Meminum air bersih yang cukup","Membeli makanan yang tidak tertutup dan kotor"],a:[0,2,4],e:"Kurang serat, makan terburu-buru, dan makanan tidak higienis dapat mengganggu pencernaan."},
+{t:"pgc",z:2,q:"Pilih SEMUA pernyataan yang benar tentang enzim dan cairan pembantu pencernaan di usus halus.",o:["Empedu membantu mengemulsikan lemak","Tripsin membantu memecah protein","Lipase membantu memecah lemak","Empedu adalah enzim yang mengubah protein menjadi asam amino","Lipase mengubah amilum menjadi gula"],a:[0,1,2],e:"Empedu mengemulsikan lemak; tripsin mencerna protein; lipase memecah lemak. Empedu bukan enzim."},
+{t:"pgc",z:2,q:"Pilih SEMUA kebiasaan yang dapat merusak sistem pernapasan.",o:["Merokok atau menggunakan vape","Menghindari asap rokok","Sering terpapar asap pembakaran tanpa perlindungan","Berolahraga teratur","Menghirup debu dan polusi terus-menerus"],a:[0,2,4],e:"Rokok, aerosol vape, asap, dan debu/polusi dapat mengganggu atau merusak saluran napas."},
+{t:"pgc",z:2,q:"Pilih pasangan tokoh dan peran yang tepat dalam peristiwa sekitar Proklamasi 1945.",o:["Soekarno — membacakan teks Proklamasi","Mohammad Hatta — mendampingi Soekarno menandatangani teks Proklamasi","Sayuti Melik — mengetik naskah Proklamasi","Pattimura — mengetik naskah Proklamasi","Ki Hajar Dewantara — membacakan Proklamasi 17 Agustus 1945"],a:[0,1,2],e:"Soekarno membacakan proklamasi, Hatta mendampingi dan ikut menandatangani, Sayuti Melik mengetik naskah."},
+{t:"pgc",z:2,q:"Pilih SEMUA tindakan nyata untuk melestarikan kearifan lokal melalui penggunaan produk lokal.",o:["Membeli dan menggunakan produk kerajinan daerah","Mengenalkan produk lokal melalui media sosial secara santun","Merendahkan produk buatan perajin setempat","Mengikuti bazar dan kegiatan budaya daerah","Memilih produk lokal berkualitas serta menghargai pembuatnya"],a:[0,1,3,4],e:"Menggunakan, mengenalkan, dan mendukung perajin lokal merupakan tindakan pelestarian budaya."},
+{t:"is",z:3,q:"Organ yang menghasilkan cairan empedu untuk membantu pencernaan lemak adalah ....",a:["hati","liver"],e:"Hati menghasilkan empedu yang disimpan sementara di kantung empedu."},
+{t:"is",z:3,q:"Zat gizi yang menjadi sumber energi utama tubuh dan banyak terdapat pada nasi adalah ....",a:["karbohidrat","karbohidrat"],e:"Nasi mengandung karbohidrat yang menjadi sumber energi utama."},
+{t:"is",z:3,q:"Gangguan pencernaan akibat sulit buang air besar karena feses terlalu keras disebut ....",a:["konstipasi","sembelit"],e:"Konstipasi atau sembelit dapat terjadi antara lain karena kurang serat dan cairan."},
+{t:"is",z:3,q:"Kantung-kantung udara kecil di paru-paru yang menjadi tempat pertukaran gas disebut ....",a:["alveolus","alveoli"],e:"Alveolus berdinding tipis dan dikelilingi kapiler darah untuk pertukaran gas."},
+{t:"is",z:3,q:"Sikap pahlawan yang ditunjukkan dengan berani menghadapi kesulitan demi membela kebenaran disebut ....",a:["keberanian","berani"],e:"Keberanian adalah salah satu nilai kepahlawanan."},
+{t:"is",z:3,q:"Pahlawan dari Sulawesi Selatan yang dijuluki Ayam Jantan dari Timur karena melawan monopoli VOC adalah ....",a:["sultan hasanuddin","hasanuddin"],e:"Sultan Hasanuddin dari Kerajaan Gowa, Sulawesi Selatan."},
+{t:"is",z:3,q:"Pahlawan emansipasi perempuan dari Jepara, Jawa Tengah, yang memperjuangkan pendidikan perempuan melalui surat-suratnya adalah ....",a:["r a kartini","ra kartini","r.a. kartini","kartini","raden ajeng kartini"],e:"R.A. Kartini memperjuangkan pendidikan dan kemajuan perempuan."},
+{t:"is",z:3,q:"Berdiri tertib, menghormati bendera, dan mengikuti upacara dengan khidmat menunjukkan sikap disiplin serta cinta ....",a:["tanah air","bangsa","indonesia"],e:"Mengikuti upacara dengan tertib merupakan wujud disiplin dan cinta tanah air."},
+{t:"is",z:3,q:"Tradisi warga membersihkan lingkungan desa secara bergiliran mencerminkan nilai tanggung jawab ....",a:["sosial","bersama","masyarakat"],e:"Kegiatan bersama untuk kepentingan lingkungan menunjukkan tanggung jawab sosial."},
+{t:"is",z:3,q:"Permainan tradisional yang menggunakan papan berlubang dan biji-bijian serta melatih strategi berhitung dikenal sebagai ....",a:["congklak","dakon"],e:"Congklak atau dakon melatih strategi, ketelitian, dan berhitung."},
+{t:"essay",z:4,q:"Jelaskan dampak kerusakan jaringan epitel bersilia pada trakea akibat kebiasaan merokok terhadap fungsi pertahanan paru-paru!",e:"Uraian: jelaskan silia normalnya menyapu lendir dan partikel ke arah faring; asap rokok merusak/melumpuhkan silia; debu, kuman, dan lendir menumpuk sehingga risiko infeksi serta gangguan pernapasan meningkat."},
+{t:"essay",z:4,q:"Ada anggapan bahwa rokok elektrik (vape) lebih aman daripada rokok tembakau. Tanggapi pernyataan tersebut dengan menjelaskan dampak biologis vape terhadap paru-paru!",e:"Uraian: vape bukan tanpa risiko; aerosol dapat mengandung nikotin, partikel halus, dan bahan kimia; dapat mengiritasi/mengganggu saluran napas dan paru-paru; nikotin menyebabkan ketergantungan; tidak tepat dianggap aman."},
+{t:"essay",z:4,q:"Mengapa strategi perjuangan bangsa Indonesia berubah dari perlawanan kedaerahan sebelum 1908 menjadi pergerakan nasional setelah 1908? Jelaskan pengaruhnya bagi keberhasilan kemerdekaan!",e:"Uraian: perlawanan daerah cenderung terpisah sehingga mudah dihadapi; muncul pendidikan, komunikasi, organisasi modern, dan kesadaran persatuan; perjuangan terkoordinasi lintas daerah memperkuat gerakan menuju kemerdekaan."},
+{t:"essay",z:4,q:"Dua teman berselisih karena masalah sepele hingga saling mengejek. Rancang solusi penyelesaian berdasarkan tiga nilai kepahlawanan!",e:"Uraian: contoh nilai keberanian mengakui kesalahan/menyampaikan kebenaran; rela berkorban atau mengalah demi damai; persatuan/kerja sama atau tanggung jawab; uraikan langkah dialog, saling meminta maaf, dan kesepakatan."},
+{t:"essay",z:4,q:"Jelaskan penyebab sembelit yang dapat terjadi karena pola makan, serta kebiasaan yang dapat dilakukan untuk menjaga kesehatan sistem pencernaan!",e:"Uraian: kurang serat dan cairan, kurang aktivitas, kebiasaan menahan BAB dapat menyebabkan feses keras/sulit keluar; makan sayur-buah, cukup minum, aktif bergerak, dan tidak menahan BAB."}
+];
+const zones={1:["🍎","Lembah Pencernaan"],2:["⚔️","Benteng Tantangan"],3:["🌬️","Hutan Pernapasan"],4:["🌟","Puncak Pengetahuan"]};
+let idx=0,answers={},startAt=0,seconds=5400,tick=null,student="",kelas="";
+const $=id=>document.getElementById(id);
+function norm(s){return String(s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^\p{L}\p{N}\s]/gu," ").replace(/\s+/g," ").trim()}
+function show(id){["start","exam","finish"].forEach(x=>$(x).classList.toggle("hidden",x!==id))}
+function render(){let q=Q[idx],z=zones[q.z];$("zoneIcon").textContent=z[0];$("zoneName").textContent=z[1];$("zoneLabel").textContent="WILAYAH "+q.z;$("qmeta").textContent=({pg:"PILIHAN GANDA",pgc:"PILIHAN GANDA KOMPLEKS • PILIH SEMUA JAWABAN BENAR",is:"ISIAN SINGKAT",essay:"URAIAN"})[q.t]+" • SOAL "+(idx+1);$("question").textContent=q.q;$("counter").textContent=(idx+1)+"/40";$("bar").style.width=((idx+1)/40*100)+"%";$("prev").disabled=idx===0;$("feedback").classList.add("hidden");let area=$("answerArea");area.innerHTML="";
+if(q.t==="pg"||q.t==="pgc"){let opts=document.createElement("div");opts.className="options";q.o.forEach((v,i)=>{let b=document.createElement("button");b.className="opt";let selected=(answers[idx]||[]).includes(i);if(selected)b.classList.add("selected");b.innerHTML='<span class="letter">'+String.fromCharCode(65+i)+'</span><span></span>';b.querySelector("span:last-child").textContent=v;b.onclick=()=>{let a=answers[idx]||[];if(q.t==="pg")a=[i];else a=a.includes(i)?a.filter(n=>n!==i):[...a,i];answers[idx]=a;render();};opts.append(b)});area.append(opts)
+}else{let ta=document.createElement("textarea");ta.className="answerText";ta.placeholder=q.t==="is"?"Ketik jawaban singkat di sini…":"Tuliskan jawaban dengan kalimat lengkap dan jelas…";ta.value=answers[idx]||"";ta.oninput=()=>answers[idx]=ta.value;area.append(ta)}
+$("hint").textContent=q.t==="pgc"?"Pilih lebih dari satu jawaban jika diperlukan.":q.t==="essay"?"Jawaban uraian akan diperiksa guru.":"Periksa kembali jawaban sebelum melanjutkan.";
+$("next").textContent=idx===39?"Selesaikan ujian →":"Simpan jawaban & lanjut →";updateScore()}
+function isCorrect(i){let q=Q[i],a=answers[i];if(q.t==="pg"||q.t==="pgc"){if(!Array.isArray(a))return false;return a.length===q.a.length&&q.a.every(n=>a.includes(n))}if(q.t==="is"){let s=norm(a);return q.a.some(v=>norm(v)===s)}return false}
+function updateScore(){let s=0;Q.forEach((q,i)=>{if(q.t==="pg"&&isCorrect(i))s+=2;if(q.t==="pgc"&&isCorrect(i))s+=2;if(q.t==="is"&&isCorrect(i))s+=2});$("score").textContent=s}
+function answeredCount(){return Q.filter((q,i)=>q.t==="pg"||q.t==="pgc"?(answers[i]||[]).length>0:String(answers[i]||"").trim().length>0).length}
+$("begin").onclick=()=>{student=$("student").value.trim();kelas=$("classroom").value;if(!student||!kelas){alert("Masukkan nama lengkap dan pilih kelas terlebih dahulu.");return}startAt=Date.now();show("exam");render();tick=setInterval(()=>{seconds--;let m=Math.floor(seconds/60),s=seconds%60;$("timer").textContent=String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");if(seconds<=0){clearInterval(tick);finish()}},1000)};
+$("prev").onclick=()=>{if(idx>0){idx--;render()}};
+$("next").onclick=()=>{if(idx<39){idx++;render()}else finish()};
+function finish(){clearInterval(tick);let obj=0;Q.forEach((q,i)=>{if((q.t==="pg"||q.t==="pgc"||q.t==="is")&&isCorrect(i))obj+=2});show("finish");$("doneName").textContent=student;$("objScore").textContent=obj+"/70";$("percent").textContent=Math.round(obj/70*100)+"%";$("answered").textContent=answeredCount()+"/40";$("essayCount").textContent="5";window.examResult={student,kelas,objectiveScore:obj,objectiveMax:70,answers,questions:Q.map((q,i)=>({number:i+1,type:q.t,question:q.q,answer:answers[i]??"",key:q.a||null,essayGuide:q.e||""})),startedAt:startAt,finishedAt:Date.now(),durationSeconds:Math.round((Date.now()-startAt)/1000),essayPending:true};}
+$("review").onclick=()=>{show("exam");idx=0;render()};
+$("save").onclick=async()=>{
+ let st=$("saveStatus");st.classList.remove("hidden");
+ if(!firebaseReady||!db){st.className="feedback bad";st.textContent="Firebase belum siap. Periksa konfigurasi Firebase pada file HTML.";return}
+ if(!window.examResult){st.className="feedback bad";st.textContent="Hasil ujian belum tersedia. Selesaikan ujian terlebih dahulu.";return}
+ $("save").disabled=true;st.className="feedback";st.textContent="Menghubungkan ke Firebase…";
+ try{
+  const cred=await signInAnonymously(auth);
+  const uid=cred.user.uid;
+  const record={
+   studentName:window.examResult.student,
+   className:window.examResult.kelas,
+   playMode:"individual",
+   status:"completed",
+   score:window.examResult.objectiveScore,
+   objectiveMax:70,
+   completedCount:40,
+   exam:"SAS IPAS Kelas VI Semester Ganjil 2026/2027",
+   answers:window.examResult.answers,
+   questionDetails:window.examResult.questions.map(q=>({
+    number:q.number,type:q.type,question:q.question,answer:q.answer,
+    key:q.key,essayGuide:q.essayGuide
+   })),
+   essayPending:true,
+   startedAt:window.examResult.startedAt,
+   finishedAt:window.examResult.finishedAt,
+   durationSeconds:window.examResult.durationSeconds,
+   updatedAt:Date.now(),
+   uid:uid
+  };
+  const attemptRef=push(ref(db,"sas_ipas_ganjil_2026_2027/results/"+uid));
+  await set(attemptRef,record);
+  st.className="feedback good";
+  st.textContent="Berhasil! Hasil ujian tersimpan di Firebase Cloud. Kode bukti: "+attemptRef.key+". Sampaikan kepada guru jika diperlukan.";
+ }catch(e){
+  console.error(e);st.className="feedback bad";
+  st.textContent="Gagal menyimpan ke Firebase: "+e.message+". Pastikan Anonymous Authentication aktif dan Rules sudah diperbarui.";
+ }finally{$("save").disabled=false}
+};
+/* Animated parallax night-sky scene */
+const c=$("scene"),ctx=c.getContext("2d");let W,H,stars=[];function resize(){W=c.width=innerWidth*devicePixelRatio;H=c.height=innerHeight*devicePixelRatio;stars=Array.from({length:85},()=>({x:Math.random()*W,y:Math.random()*H*.65,r:Math.random()*1.8+0.4,p:Math.random()*6}))}addEventListener("resize",resize);resize();let t=0;function draw(){t+=.008;ctx.clearRect(0,0,W,H);let g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,"#09152e");g.addColorStop(.65,"#17435a");g.addColorStop(1,"#102c3d");ctx.fillStyle=g;ctx.fillRect(0,0,W,H);stars.forEach(s=>{ctx.globalAlpha=.35+.5*Math.sin(t*2+s.p);ctx.fillStyle="#d8f5ff";ctx.beginPath();ctx.arc(s.x,s.y,s.r,0,Math.PI*2);ctx.fill()});ctx.globalAlpha=1;let moonX=W*.78,moonY=H*.18;ctx.fillStyle="#ffe4a1";ctx.shadowBlur=45;ctx.shadowColor="#ffdb88";ctx.beginPath();ctx.arc(moonX,moonY,Math.min(W,H)*.045,0,7);ctx.fill();ctx.shadowBlur=0;function ridge(y,amp,color,speed){ctx.beginPath();ctx.moveTo(0,H);for(let x=0;x<=W+20;x+=10){let yy=y+Math.sin(x*.004+ t*speed)*amp+Math.sin(x*.009-t*speed*.6)*amp*.4;ctx.lineTo(x,yy)}ctx.lineTo(W,H);ctx.closePath();ctx.fillStyle=color;ctx.fill()}ridge(H*.67,H*.055,"#17485a",.6);ridge(H*.76,H*.045,"#126052",.9);ridge(H*.85,H*.025,"#0b443e",1.2);ctx.fillStyle="#0a392f";ctx.fillRect(0,H*.88,W,H*.12);ctx.fillStyle="#ffd166";for(let i=0;i<7;i++){let x=((i*173+t*25*devicePixelRatio)%(W+100))-50;ctx.beginPath();ctx.arc(x,H*.88-12,3,0,7);ctx.fill()}requestAnimationFrame(draw)}draw();
+</script>
+</body></html>
