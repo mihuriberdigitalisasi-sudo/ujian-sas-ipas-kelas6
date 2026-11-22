@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dashboard Guru — SAS IPAS Kelas VI</title>
+<style>
+:root{--navy:#10243c;--blue:#176b87;--gold:#f4bd52;--bg:#f2f6fa;--ink:#1d2b3a;--muted:#65758a;--line:#dce5ee;--green:#16845d;--red:#b83c4b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,Segoe UI,sans-serif}
+header{background:linear-gradient(115deg,#10243c,#176b87);color:#fff;padding:22px max(18px,calc((100vw - 1180px)/2));display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap}
+header h1{font-size:clamp(20px,3vw,29px);margin:0}header p{margin:5px 0 0;color:#d6e8f2;font-size:13px}
+main{width:min(1180px,94vw);margin:26px auto 50px}.card{background:white;border:1px solid var(--line);border-radius:18px;padding:22px;box-shadow:0 10px 35px #16324a0a;margin-bottom:18px}
+h2{font-size:19px;margin:0 0 15px}.muted{color:var(--muted);font-size:13px;line-height:1.6}
+input,select{border:1px solid #cbd7e3;border-radius:10px;padding:12px 13px;font:inherit;width:100%;background:white;color:var(--ink)}
+label{display:block;font-size:13px;font-weight:700;margin-bottom:6px}.field{margin-bottom:13px}
+button{border:0;border-radius:10px;padding:12px 16px;font-weight:800;cursor:pointer;background:var(--blue);color:white}button.secondary{background:#e8eef4;color:var(--navy)}button:disabled{opacity:.5;cursor:not-allowed}
+.login{max-width:440px;margin:7vh auto}.login .brand{font-weight:900;color:var(--blue);font-size:13px;letter-spacing:.12em;margin-bottom:8px}
+.hidden{display:none!important}.status{padding:12px;border-radius:10px;font-size:13px;margin-top:12px;background:#f2f6fa}.status.bad{background:#fff0f1;color:var(--red)}.status.good{background:#eaf8f1;color:var(--green)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.stat{border:1px solid var(--line);border-radius:14px;padding:15px}.stat span{font-size:12px;color:var(--muted)}.stat strong{display:block;font-size:26px;margin-top:4px}
+.filters{display:grid;grid-template-columns:1.3fr 1fr 1fr auto;gap:10px;align-items:end}
+.tablewrap{overflow:auto;margin-top:14px}table{width:100%;border-collapse:collapse;min-width:820px}th,td{text-align:left;padding:12px 10px;border-bottom:1px solid var(--line);font-size:13px;vertical-align:top}th{color:#53667b;background:#f7f9fb;position:sticky;top:0}td strong{color:var(--navy)}.tag{display:inline-block;border-radius:99px;padding:4px 8px;background:#eaf8f1;color:var(--green);font-size:11px;font-weight:800}
+.rowactions{display:flex;gap:8px;flex-wrap:wrap}.small{font-size:12px}
+@media(max-width:760px){.stats{grid-template-columns:1fr 1fr}.filters{grid-template-columns:1fr 1fr}.card{padding:16px}}
+@media(max-width:430px){.filters{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<header><div><h1>Dashboard Guru — Ekspedisi Pengetahuan</h1><p>Rekap Ujian Sumatif Akhir Semester Ganjil • IPAS Kelas VI</p></div><button id="logout" class="secondary hidden">Keluar</button></header>
+<main>
+<section id="loginCard" class="card login">
+ <div class="brand">MIHURI • PANEL GURU</div><h2>Masuk Dashboard Guru</h2>
+ <p class="muted">Gunakan akun guru yang terdaftar pada Firebase Authentication. Hanya akun yang diizinkan Rules Firebase yang dapat membaca hasil ujian.</p>
+ <div class="field"><label for="email">Email guru</label><input id="email" type="email" autocomplete="username" value="rumahbelajar.it@gmail.com"></div>
+ <div class="field"><label for="password">Password</label><input id="password" type="password" autocomplete="current-password" placeholder="Masukkan password akun guru"></div>
+ <button id="login" style="width:100%">Masuk</button><div id="loginStatus" class="status hidden"></div>
+</section>
+<section id="dashboard" class="hidden">
+ <div class="card"><h2>Ringkasan hasil ujian</h2><div class="stats">
+  <div class="stat"><span>Jumlah percobaan tersimpan</span><strong id="total">0</strong></div>
+  <div class="stat"><span>Jumlah siswa unik</span><strong id="students">0</strong></div>
+  <div class="stat"><span>Rata-rata skor objektif</span><strong id="average">0</strong></div>
+  <div class="stat"><span>Menunggu koreksi uraian</span><strong id="pending">0</strong></div>
+ </div></div>
+ <div class="card"><h2>Data siswa yang telah menyimpan ujian</h2>
+  <div class="filters">
+   <div><label for="search">Cari nama siswa</label><input id="search" placeholder="Ketik nama siswa…"></div>
+   <div><label for="classFilter">Filter kelas</label><select id="classFilter"><option value="">Semua kelas</option></select></div>
+   <div><label for="sort">Urutkan</label><select id="sort"><option value="latest">Terbaru</option><option value="highest">Skor tertinggi</option><option value="name">Nama A–Z</option></select></div>
+   <button id="refresh">Muat ulang</button>
+  </div>
+  <div class="rowactions" style="margin-top:14px"><button id="export">Unduh rekap CSV</button><span class="muted small" id="lastUpdated"></span></div>
+  <div class="tablewrap"><table><thead><tr><th>No.</th><th>Nama siswa</th><th>Kelas</th><th>Skor objektif</th><th>Progres</th><th>Status uraian</th><th>Waktu selesai</th><th>Detail</th></tr></thead><tbody id="rows"><tr><td colspan="8">Belum ada data.</td></tr></tbody></table></div>
+  <div id="detail" class="status hidden"></div>
+  <div id="dataStatus" class="status hidden"></div>
+ </div>
+</section>
+</main>
+<script type="module">
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {getAuth,signInWithEmailAndPassword,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {getDatabase,ref,get} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+const firebaseConfig={
+ apiKey:"AIzaSyA7SdLtfLGZU-jh9MFt0_nDsJWc_gktXNk",
+ authDomain:"jejak-pahlawan-mihuri.firebaseapp.com",
+ databaseURL:"https://jejak-pahlawan-mihuri-default-rtdb.asia-southeast1.firebasedatabase.app",
+ projectId:"jejak-pahlawan-mihuri",
+ storageBucket:"jejak-pahlawan-mihuri.firebasestorage.app",
+ messagingSenderId:"503390306280",
+ appId:"1:503390306280:web:3ec922450ce03172432e5d"
+};
+const app=initializeApp(firebaseConfig),auth=getAuth(app),db=getDatabase(app);
+const $=id=>document.getElementById(id);
+let allRows=[];
+function status(el,msg,type=""){el.className="status "+type;el.textContent=msg;el.classList.remove("hidden")}
+function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function fmt(ts){if(!ts)return "—";let d=new Date(Number(ts));return isNaN(d)?"—":d.toLocaleString("id-ID")}
+function flatten(data){let out=[];if(!data||typeof data!=="object")return out;Object.entries(data).forEach(([uid,attempts])=>{if(!attempts||typeof attempts!=="object")return;Object.entries(attempts).forEach(([attemptId,r])=>{if(r&&typeof r==="object")out.push({...r,uid,attemptId})})});return out}
+async function loadData(){
+ const el=$("dataStatus");status(el,"Mengambil data dari Firebase…");
+ try{
+  const snap=await get(ref(db,"sas_ipas_ganjil_2026_2027/results"));
+  allRows=flatten(snap.val());
+  const classes=[...new Set(allRows.map(r=>r.className).filter(Boolean))].sort();
+  $("classFilter").innerHTML='<option value="">Semua kelas</option>'+classes.map(c=>'<option value="'+esc(c)+'">'+esc(c)+'</option>').join("");
+  $("total").textContent=allRows.length;
+  $("students").textContent=new Set(allRows.map(r=>(r.studentName||"").toLowerCase()+"|"+(r.className||""))).size;
+  $("average").textContent=allRows.length?(allRows.reduce((a,r)=>a+Number(r.score||0),0)/allRows.length).toFixed(1):"0";
+  $("pending").textContent=allRows.filter(r=>r.essayPending).length;
+  $("lastUpdated").textContent="Diperbarui: "+new Date().toLocaleTimeString("id-ID");
+  status(el,"Data berhasil dimuat dari Firebase.","good");renderRows();
+ }catch(e){status(el,"Gagal membaca data: "+e.message+". Pastikan login menggunakan rumahbelajar.it@gmail.com dan Rules sudah diperbarui.","bad")}
+}
+function renderRows(){
+ let rows=allRows.filter(r=>(!$("search").value||String(r.studentName||"").toLowerCase().includes($("search").value.toLowerCase()))&&(!$("classFilter").value||r.className===$("classFilter").value));
+ const sort=$("sort").value;rows.sort((a,b)=>sort==="highest"?Number(b.score||0)-Number(a.score||0):sort==="name"?String(a.studentName||"").localeCompare(String(b.studentName||""),"id"):Number(b.updatedAt||0)-Number(a.updatedAt||0));
+ $("rows").innerHTML=rows.length?rows.map((r,i)=>'<tr><td>'+(i+1)+'</td><td><strong>'+esc(r.studentName)+'</strong><div class="muted small">'+esc(r.exam||"SAS IPAS")+'</div></td><td>'+esc(r.className)+'</td><td><strong>'+Number(r.score||0)+'/70</strong></td><td>'+Number(r.completedCount||0)+'/40</td><td>'+(r.essayPending?'<span class="tag">Perlu koreksi</span>':'Selesai')+'</td><td>'+esc(fmt(r.finishedAt||r.updatedAt))+'</td><td><button class="secondary detailBtn" data-uid="'+esc(r.uid)+'" data-attempt="'+esc(r.attemptId)+'">Lihat</button></td></tr>').join(""):'<tr><td colspan="8">Belum ada hasil sesuai filter.</td></tr>';
+ document.querySelectorAll(".detailBtn").forEach(b=>b.onclick=()=>showDetail(b.dataset.uid,b.dataset.attempt));
+}
+function showDetail(uid,id){
+ const r=allRows.find(x=>x.uid===uid&&x.attemptId===id);if(!r)return;
+ const answers=r.questionDetails||[];let text=`${r.studentName} • ${r.className}\nSkor objektif: ${r.score}/70\nDurasi: ${Math.round(Number(r.durationSeconds||0)/60)} menit\n\n`;
+ text+=answers.map(q=>`Soal ${q.number} (${q.type})\n${q.question||""}\nJawaban: ${Array.isArray(q.answer)?q.answer.join(", "):q.answer||"(kosong)"}\n`).join("\n");
+ const box=$("detail");box.textContent=text;box.className="status";box.style.whiteSpace="pre-wrap";
+}
+$("login").onclick=async()=>{const b=$("login");b.disabled=true;try{await signInWithEmailAndPassword(auth,$("email").value.trim(),$("password").value);status($("loginStatus"),"Login berhasil.","good")}catch(e){status($("loginStatus"),"Login gagal: "+e.message,"bad")}finally{b.disabled=false}};
+$("logout").onclick=()=>signOut(auth);
+onAuthStateChanged(auth,user=>{const ok=!!user&&user.email==="rumahbelajar.it@gmail.com";$("loginCard").classList.toggle("hidden",ok);$("dashboard").classList.toggle("hidden",!ok);$("logout").classList.toggle("hidden",!ok);if(ok)loadData()});
+$("refresh").onclick=loadData;$("search").oninput=renderRows;$("classFilter").onchange=renderRows;$("sort").onchange=renderRows;
+$("export").onclick=()=>{const cols=["studentName","className","score","objectiveMax","completedCount","essayPending","durationSeconds","finishedAt","uid","attemptId"];const lines=[cols.join(","),...allRows.map(r=>cols.map(k=>'"'+String(r[k]??"").replace(/"/g,'""')+'"').join(","))];const blob=new Blob(["\ufeff"+lines.join("\r\n")],{type:"text/csv;charset=utf-8"});const a=document.createElement("a");a.href=URL.createObjectURL(blob);a.download="rekap_SAS_IPAS_Kelas_VI.csv";a.click();URL.revokeObjectURL(a.href)};
+</script>
+</body></html>
