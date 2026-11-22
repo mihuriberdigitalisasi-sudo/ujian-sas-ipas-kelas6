@@ -19,6 +19,22 @@ button{border:0;border-radius:10px;padding:12px 16px;font-weight:800;cursor:poin
 .filters{display:grid;grid-template-columns:1.3fr 1fr 1fr auto;gap:10px;align-items:end}
 .tablewrap{overflow:auto;margin-top:14px}table{width:100%;border-collapse:collapse;min-width:820px}th,td{text-align:left;padding:12px 10px;border-bottom:1px solid var(--line);font-size:13px;vertical-align:top}th{color:#53667b;background:#f7f9fb;position:sticky;top:0}td strong{color:var(--navy)}.tag{display:inline-block;border-radius:99px;padding:4px 8px;background:#eaf8f1;color:var(--green);font-size:11px;font-weight:800}
 .rowactions{display:flex;gap:8px;flex-wrap:wrap}.small{font-size:12px}
+
+.detailpanel{margin-top:18px;border:1px solid var(--line);border-radius:15px;padding:18px;background:#fbfdff}
+.detailhead{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
+.qcard{border:1px solid var(--line);border-radius:13px;padding:14px;margin:12px 0;background:#fff}
+.qtitle{font-weight:850;color:var(--navy);margin-bottom:8px}.qbody{white-space:pre-wrap;line-height:1.55}
+.answerbox{background:#eef5fa;border-left:4px solid var(--blue);border-radius:8px;padding:11px;margin:10px 0;white-space:pre-wrap;line-height:1.5}
+.keybox{background:#eef8f1;border-left:4px solid var(--green);border-radius:8px;padding:10px;margin-top:8px;font-size:13px;white-space:pre-wrap}
+.optionline{padding:5px 8px;border-radius:7px;margin:4px 0;font-size:13px;background:#f4f7fa}
+.optionline.chosen{background:#fff3d9;border:1px solid #edc56d;font-weight:800}
+.qresult{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:5px 10px;font-size:12px;font-weight:850;margin-top:10px}.qresult.good{background:#e8f7ef;color:#176b48}.qresult.bad{background:#fff0f0;color:#a12626}.auditbox{padding:12px;border-radius:10px;background:#eef5fa;margin:12px 0;line-height:1.6}
+.essaygrade{display:grid;grid-template-columns:110px 1fr;gap:10px;align-items:end;margin-top:12px}
+.essaygrade input{max-width:110px}.essaygrade textarea{width:100%;min-height:70px;border:1px solid #cbd7e3;border-radius:10px;padding:10px;font:inherit}
+.gradefooter{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap;margin-top:15px;padding-top:14px;border-top:1px solid var(--line)}
+.finalmark{font-size:21px;font-weight:900;color:var(--navy)}
+@media(max-width:560px){.essaygrade{grid-template-columns:1fr}.essaygrade input{max-width:none}}
+
 @media(max-width:760px){.stats{grid-template-columns:1fr 1fr}.filters{grid-template-columns:1fr 1fr}.card{padding:16px}}
 @media(max-width:430px){.filters{grid-template-columns:1fr}.stats{grid-template-columns:1fr 1fr}}
 </style>
@@ -48,8 +64,8 @@ button{border:0;border-radius:10px;padding:12px 16px;font-weight:800;cursor:poin
    <button id="refresh">Muat ulang</button>
   </div>
   <div class="rowactions" style="margin-top:14px"><button id="export">Unduh rekap CSV</button><span class="muted small" id="lastUpdated"></span></div>
-  <div class="tablewrap"><table><thead><tr><th>No.</th><th>Nama siswa</th><th>Kelas</th><th>Skor objektif</th><th>Progres</th><th>Status uraian</th><th>Waktu selesai</th><th>Detail</th></tr></thead><tbody id="rows"><tr><td colspan="8">Belum ada data.</td></tr></tbody></table></div>
-  <div id="detail" class="status hidden"></div>
+  <div class="tablewrap"><table><thead><tr><th>No.</th><th>Nama siswa</th><th>Kelas</th><th>Nilai</th><th>Progres</th><th>Status uraian</th><th>Waktu selesai</th><th>Detail</th></tr></thead><tbody id="rows"><tr><td colspan="8">Belum ada data.</td></tr></tbody></table></div>
+  <div id="detail" class="hidden"></div>
   <div id="dataStatus" class="status hidden"></div>
  </div>
 </section>
@@ -57,7 +73,7 @@ button{border:0;border-radius:10px;padding:12px 16px;font-weight:800;cursor:poin
 <script type="module">
 import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {getAuth,signInWithEmailAndPassword,onAuthStateChanged,signOut} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-import {getDatabase,ref,get} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+import {getDatabase,ref,get,update} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 const firebaseConfig={
  apiKey:"AIzaSyA7SdLtfLGZU-jh9MFt0_nDsJWc_gktXNk",
  authDomain:"jejak-pahlawan-mihuri.firebaseapp.com",
@@ -83,7 +99,7 @@ async function loadData(){
   $("classFilter").innerHTML='<option value="">Semua kelas</option>'+classes.map(c=>'<option value="'+esc(c)+'">'+esc(c)+'</option>').join("");
   $("total").textContent=allRows.length;
   $("students").textContent=new Set(allRows.map(r=>(r.studentName||"").toLowerCase()+"|"+(r.className||""))).size;
-  $("average").textContent=allRows.length?(allRows.reduce((a,r)=>a+Number(r.score||0),0)/allRows.length).toFixed(1):"0";
+  $("average").textContent=allRows.length?(allRows.reduce((a,r)=>a+recomputedObjectiveScore(r),0)/allRows.length).toFixed(1):"0";
   $("pending").textContent=allRows.filter(r=>r.essayPending).length;
   $("lastUpdated").textContent="Diperbarui: "+new Date().toLocaleTimeString("id-ID");
   status(el,"Data berhasil dimuat dari Firebase.","good");renderRows();
@@ -91,15 +107,121 @@ async function loadData(){
 }
 function renderRows(){
  let rows=allRows.filter(r=>(!$("search").value||String(r.studentName||"").toLowerCase().includes($("search").value.toLowerCase()))&&(!$("classFilter").value||r.className===$("classFilter").value));
- const sort=$("sort").value;rows.sort((a,b)=>sort==="highest"?Number(b.score||0)-Number(a.score||0):sort==="name"?String(a.studentName||"").localeCompare(String(b.studentName||""),"id"):Number(b.updatedAt||0)-Number(a.updatedAt||0));
- $("rows").innerHTML=rows.length?rows.map((r,i)=>'<tr><td>'+(i+1)+'</td><td><strong>'+esc(r.studentName)+'</strong><div class="muted small">'+esc(r.exam||"SAS IPAS")+'</div></td><td>'+esc(r.className)+'</td><td><strong>'+Number(r.score||0)+'/70</strong></td><td>'+Number(r.completedCount||0)+'/40</td><td>'+(r.essayPending?'<span class="tag">Perlu koreksi</span>':'Selesai')+'</td><td>'+esc(fmt(r.finishedAt||r.updatedAt))+'</td><td><button class="secondary detailBtn" data-uid="'+esc(r.uid)+'" data-attempt="'+esc(r.attemptId)+'">Lihat</button></td></tr>').join(""):'<tr><td colspan="8">Belum ada hasil sesuai filter.</td></tr>';
+ const sort=$("sort").value;rows.sort((a,b)=>sort==="highest"?recomputedObjectiveScore(b)-recomputedObjectiveScore(a):sort==="name"?String(a.studentName||"").localeCompare(String(b.studentName||""),"id"):Number(b.updatedAt||0)-Number(a.updatedAt||0));
+ $("rows").innerHTML=rows.length?rows.map((r,i)=>'<tr><td>'+(i+1)+'</td><td><strong>'+esc(r.studentName)+'</strong><div class="muted small">'+esc(r.exam||"SAS IPAS")+'</div></td><td>'+esc(r.className)+'</td><td><strong>'+Number(r.finalScore??recomputedObjectiveScore(r))+(r.finalScore!==undefined?'/100':'/70')+'</strong></td><td>'+Number(r.completedCount||0)+'/40</td><td>'+(r.essayPending?'<span class="tag">Perlu koreksi</span>':'Selesai')+'</td><td>'+esc(fmt(r.finishedAt||r.updatedAt))+'</td><td><button class="secondary detailBtn" data-uid="'+esc(r.uid)+'" data-attempt="'+esc(r.attemptId)+'">Lihat</button></td></tr>').join(""):'<tr><td colspan="8">Belum ada hasil sesuai filter.</td></tr>';
  document.querySelectorAll(".detailBtn").forEach(b=>b.onclick=()=>showDetail(b.dataset.uid,b.dataset.attempt));
+}
+function typeLabel(t){return ({pg:"Pilihan ganda",pgc:"Pilihan ganda kompleks",is:"Isian singkat",essay:"Esai / uraian"})[t]||t||"Soal"}
+function answerText(q){
+ const a=q.answer;
+ if(a===null||a===undefined||a==="")return "Tidak dijawab";
+ if(Array.isArray(a)){
+  if((q.type==="pg"||q.type==="pgc")&&Array.isArray(q.options)){
+   return a.map(i=>{const n=Number(i);return String.fromCharCode(65+n)+". "+(q.options[n]??"Pilihan tidak tersedia")}).join("\n");
+  }
+  if(q.type==="pg"||q.type==="pgc")return a.map(i=>String.fromCharCode(65+Number(i))).join(", ")+" (teks opsi tidak tersimpan pada kiriman lama)";
+  return a.join(", ");
+ }
+ if((q.type==="pg"||q.type==="pgc")&&Array.isArray(q.options)&&Number.isInteger(Number(a))){
+  const n=Number(a);return String.fromCharCode(65+n)+". "+(q.options[n]??"Pilihan tidak tersedia");
+ }
+ if((q.type==="pg"||q.type==="pgc")&&Number.isInteger(Number(a)))return String.fromCharCode(65+Number(a))+" (teks opsi tidak tersimpan pada kiriman lama)";
+ return String(a);
+}
+function keyText(q){
+ if(q.key===null||q.key===undefined)return "";
+ if(Array.isArray(q.key)){
+  if((q.type==="pg"||q.type==="pgc")&&Array.isArray(q.options))
+   return q.key.map(i=>String.fromCharCode(65+Number(i))+". "+(q.options[Number(i)]??"")).join("\n");
+  return q.key.join(", ");
+ }
+ if(Array.isArray(q.options)&&Number.isInteger(Number(q.key))&&(q.type==="pg"||q.type==="pgc")){
+  const n=Number(q.key);return String.fromCharCode(65+n)+". "+(q.options[n]??"");
+ }
+ if((q.type==="pg"||q.type==="pgc")&&Number.isInteger(Number(q.key)))return String.fromCharCode(65+Number(q.key))+" (teks opsi tidak tersimpan pada kiriman lama)";
+ return String(q.key);
+}
+function normalizedAnswer(v){return String(v??"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^\p{L}\p{N}\s]/gu," ").replace(/\s+/g," ").trim()}
+function sameIndexSet(answer,key){
+ const a=Array.isArray(answer)?answer.map(Number).sort((x,y)=>x-y):answer!==""&&answer!==null&&answer!==undefined?[Number(answer)]:[];
+ const k=Array.isArray(key)?key.map(Number).sort((x,y)=>x-y):key!==null&&key!==undefined?[Number(key)]:[];
+ return a.length>0&&a.length===k.length&&a.every((v,i)=>v===k[i]);
+}
+function questionCorrect(q){
+ if(q.type==="pg"||q.type==="pgc")return sameIndexSet(q.answer,q.key);
+ if(q.type==="is"){
+  const a=normalizedAnswer(q.answer);
+  return !!a && (Array.isArray(q.key)?q.key: [q.key]).some(k=>normalizedAnswer(k)===a);
+ }
+ return null;
+}
+function recomputedObjectiveScore(r){
+ const qs=Array.isArray(r.questionDetails)?r.questionDetails:[];
+ if(!qs.length)return Number(r.score||0);
+ return qs.reduce((sum,q)=>sum+(questionCorrect(q)===true?2:0),0);
 }
 function showDetail(uid,id){
  const r=allRows.find(x=>x.uid===uid&&x.attemptId===id);if(!r)return;
- const answers=r.questionDetails||[];let text=`${r.studentName} • ${r.className}\nSkor objektif: ${r.score}/70\nDurasi: ${Math.round(Number(r.durationSeconds||0)/60)} menit\n\n`;
- text+=answers.map(q=>`Soal ${q.number} (${q.type})\n${q.question||""}\nJawaban: ${Array.isArray(q.answer)?q.answer.join(", "):q.answer||"(kosong)"}\n`).join("\n");
- const box=$("detail");box.textContent=text;box.className="status";box.style.whiteSpace="pre-wrap";
+ const qs=r.questionDetails||[];
+ const box=$("detail");box.className="detailpanel";box.innerHTML="";
+ const head=document.createElement("div");head.className="detailhead";
+ const h=document.createElement("div");h.innerHTML="<h2>Hasil ujian: "+esc(r.studentName)+"</h2><div class='muted'>Kelas "+esc(r.className)+" • "+esc(fmt(r.finishedAt||r.updatedAt))+" • Durasi "+Math.round(Number(r.durationSeconds||0)/60)+" menit</div>";
+ const close=document.createElement("button");close.className="secondary";close.textContent="Tutup detail";close.onclick=()=>{box.className="hidden";box.innerHTML=""};
+ head.append(h,close);box.append(head);
+ const summary=document.createElement("div");summary.className="status good";summary.textContent="Skor otomatis: "+Number(r.score||0)+"/70 • Nilai esai: "+(r.essayTotal??"belum dikoreksi")+"/30 • Nilai akhir: "+(r.finalScore??"menunggu koreksi");box.append(summary);
+ const audited=qs.filter(q=>q.type==="pg"||q.type==="pgc"||q.type==="is");
+ const recomputed=audited.reduce((sum,q)=>sum+(questionCorrect(q)===true?2:0),0);
+ const audit=document.createElement("div");audit.className="auditbox";
+ audit.textContent="Audit jawaban otomatis: "+recomputed+"/"+(audited.length*2)+" berdasarkan "+audited.length+" soal objektif. Skor yang tersimpan: "+Number(r.score||0)+"/70."+(recomputed!==Number(r.score||0)?" PERHATIAN: skor tersimpan berbeda dari hasil pemeriksaan ulang.":" Hasil pemeriksaan ulang cocok dengan skor tersimpan.");
+ box.append(audit);
+ const gradeInputs=[];
+ qs.forEach(q=>{
+  const card=document.createElement("div");card.className="qcard";
+  const title=document.createElement("div");title.className="qtitle";title.textContent="Soal "+q.number+" — "+typeLabel(q.type);card.append(title);
+  const question=document.createElement("div");question.className="qbody";question.textContent=q.question||"(teks soal tidak tersedia)";card.append(question);
+  if((q.type==="pg"||q.type==="pgc")&&Array.isArray(q.options)&&q.options.length){
+   const opts=document.createElement("div");opts.style.marginTop="9px";
+   const selected=Array.isArray(q.answer)?q.answer.map(Number):q.answer!==""?[Number(q.answer)]:[];
+   q.options.forEach((op,i)=>{const line=document.createElement("div");line.className="optionline"+(selected.includes(i)?" chosen":"");line.textContent=String.fromCharCode(65+i)+". "+op+(selected.includes(i)?"  ← DIPILIH SISWA":"");opts.append(line)});card.append(opts);
+  }
+  const ans=document.createElement("div");ans.className="answerbox";ans.textContent="JAWABAN SISWA:\n"+answerText(q);card.append(ans);
+  const verdict=questionCorrect(q);
+  if(verdict!==null){const mark=document.createElement("div");mark.className="qresult "+(verdict?"good":"bad");mark.textContent=verdict?"✓ JAWABAN BENAR (+2)":"✕ JAWABAN SALAH / TIDAK SESUAI KUNCI";card.append(mark)}
+  if(q.type==="essay"){
+   const guide=document.createElement("div");guide.className="keybox";guide.textContent="PEDOMAN KOREKSI (acuan):\n"+(q.essayGuide||"Periksa kesesuaian isi, ketepatan konsep, dan kelengkapan penjelasan.");card.append(guide);
+   const grading=document.createElement("div");grading.className="essaygrade";
+   const scoreWrap=document.createElement("div");const lab=document.createElement("label");lab.textContent="Nilai (0–6)";const input=document.createElement("input");input.type="number";input.min="0";input.max="6";input.step="1";input.value=(r.essayGrades&&r.essayGrades[q.number]&&r.essayGrades[q.number].score!==undefined)?r.essayGrades[q.number].score:"";input.placeholder="0–6";scoreWrap.append(lab,input);
+   const commentWrap=document.createElement("div");const cl=document.createElement("label");cl.textContent="Catatan guru (opsional)";const comment=document.createElement("textarea");comment.placeholder="Tulis alasan nilai atau saran perbaikan…";comment.value=(r.essayGrades&&r.essayGrades[q.number]&&r.essayGrades[q.number].comment)||"";commentWrap.append(cl,comment);
+   grading.append(scoreWrap,commentWrap);card.append(grading);gradeInputs.push({number:q.number,input,comment});
+  }else if(q.key!==null&&q.key!==undefined){
+   const key=document.createElement("div");key.className="keybox";key.textContent="KUNCI / JAWABAN ACUAN:\n"+keyText(q);card.append(key);
+  }
+  box.append(card);
+ });
+ if(gradeInputs.length){
+  const footer=document.createElement("div");footer.className="gradefooter";
+  const total=document.createElement("div");total.className="finalmark";const calc=()=>{let n=0,complete=true;gradeInputs.forEach(x=>{if(x.input.value===""){complete=false}else n+=Math.max(0,Math.min(6,Number(x.input.value)||0))});total.textContent="Nilai esai: "+n+"/30"+(complete?"":" • belum lengkap")};gradeInputs.forEach(x=>x.input.addEventListener("input",calc));calc();
+  const save=document.createElement("button");save.textContent="Simpan koreksi & nilai akhir";save.onclick=async()=>{
+   const grades={};let sum=0;
+   for(const x of gradeInputs){if(x.input.value===""){alert("Isi nilai untuk semua 5 soal esai terlebih dahulu.");return}const n=Number(x.input.value);if(!Number.isInteger(n)||n<0||n>6){alert("Nilai setiap esai harus bilangan bulat 0 sampai 6.");return}sum+=n;grades[x.number]={score:n,comment:x.comment.value.trim()}}
+   save.disabled=true;save.textContent="Menyimpan…";
+   try{
+    const objective=recomputedObjectiveScore(r),final=Math.min(100,objective+sum);
+    await update(ref(db,"sas_ipas_ganjil_2026_2027/results/"+uid+"/"+id),{
+     essayGrades:grades,essayTotal:sum,essayPending:false,finalScore:final,
+     gradedBy:auth.currentUser.email,gradedAt:Date.now()
+    });
+    r.essayGrades=grades;r.essayTotal=sum;r.essayPending=false;r.finalScore=final;r.gradedBy=auth.currentUser.email;r.gradedAt=Date.now();
+    status($("dataStatus"),"Koreksi tersimpan. Nilai akhir "+final+"/100 untuk "+r.studentName+".","good");
+    renderRows();summary.textContent="Skor otomatis hasil pemeriksaan ulang: "+objective+"/70 • Nilai esai: "+sum+"/30 • NILAI AKHIR: "+final+"/100";
+    save.textContent="Koreksi tersimpan";
+   }catch(e){alert("Gagal menyimpan koreksi: "+e.message+". Periksa Firebase Rules terbaru.");save.disabled=false;save.textContent="Simpan koreksi & nilai akhir"}
+  };
+  footer.append(total,save);box.append(footer);
+ }else{
+  const note=document.createElement("div");note.className="muted";note.textContent="Tidak ada soal esai pada data ini.";box.append(note);
+ }
+ box.classList.remove("hidden");box.scrollIntoView({behavior:"smooth",block:"start"});
 }
 $("login").onclick=async()=>{const b=$("login");b.disabled=true;try{await signInWithEmailAndPassword(auth,$("email").value.trim(),$("password").value);status($("loginStatus"),"Login berhasil.","good")}catch(e){status($("loginStatus"),"Login gagal: "+e.message,"bad")}finally{b.disabled=false}};
 $("logout").onclick=()=>signOut(auth);
