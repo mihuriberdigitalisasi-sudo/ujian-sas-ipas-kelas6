@@ -42,7 +42,7 @@
 </section>
 <section id="finish" class="panel hidden">
  <div class="eyebrow">Ekspedisi selesai</div><h1 style="margin:8px 0">Hebat, <span id="doneName" style="color:var(--gold)"></span>!</h1><p class="note">Semua jawaban telah direkap. Tekan tombol Simpan Nilai agar hasil ujian dikirim ke Firebase Cloud.</p>
- <div class="resultbig" id="percent">—</div><div class="summary"><div><strong id="objScore">0/80</strong><span>Skor objektif sementara (maks. 70)</span></div><div><strong id="answered">40/40</strong><span>Soal dijawab</span></div><div><strong id="essayCount">5</strong><span>Uraian menunggu koreksi</span></div></div>
+ <div class="resultbig" id="percent">—</div><div class="summary"><div><strong id="objScore">0/80</strong><span>Skor otomatis sementara (maks. 70)</span></div><div><strong id="answered">40/40</strong><span>Soal dijawab</span></div><div><strong id="essayCount">5</strong><span>Uraian menunggu koreksi</span></div></div>
  <div class="feedback">Nilai objektif dihitung otomatis dari pilihan ganda, pilihan ganda kompleks, dan isian singkat. Lima jawaban uraian disimpan lengkap dan perlu dinilai guru agar nilai akhir maksimal 100 dapat ditetapkan secara adil.</div>
  <div class="actions"><button class="btn secondary" id="review">Tinjau jawaban</button><button class="btn" id="save">☁️ Simpan Nilai ke Firebase</button></div><div id="saveStatus" class="feedback hidden"></div>
 </section>
@@ -125,7 +125,7 @@ function answeredCount(){return Q.filter((q,i)=>q.t==="pg"||q.t==="pgc"?(answers
 $("begin").onclick=()=>{student=$("student").value.trim();kelas=$("classroom").value;if(!student||!kelas){alert("Masukkan nama lengkap dan pilih kelas terlebih dahulu.");return}startAt=Date.now();show("exam");render();tick=setInterval(()=>{seconds--;let m=Math.floor(seconds/60),s=seconds%60;$("timer").textContent=String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");if(seconds<=0){clearInterval(tick);finish()}},1000)};
 $("prev").onclick=()=>{if(idx>0){idx--;render()}};
 $("next").onclick=()=>{if(idx<39){idx++;render()}else finish()};
-function finish(){clearInterval(tick);let obj=0;Q.forEach((q,i)=>{if((q.t==="pg"||q.t==="pgc"||q.t==="is")&&isCorrect(i))obj+=2});show("finish");$("doneName").textContent=student;$("objScore").textContent=obj+"/70";$("percent").textContent=Math.round(obj/70*100)+"%";$("answered").textContent=answeredCount()+"/40";$("essayCount").textContent="5";window.examResult={student,kelas,objectiveScore:obj,objectiveMax:70,answers,questions:Q.map((q,i)=>({number:i+1,type:q.t,question:q.q,answer:answers[i]??"",key:q.a||null,essayGuide:q.e||""})),startedAt:startAt,finishedAt:Date.now(),durationSeconds:Math.round((Date.now()-startAt)/1000),essayPending:true};}
+function finish(){clearInterval(tick);let obj=0;Q.forEach((q,i)=>{if((q.t==="pg"||q.t==="pgc"||q.t==="is")&&isCorrect(i))obj+=2});show("finish");$("doneName").textContent=student;$("objScore").textContent=obj+"/70";$("percent").textContent=Math.round(obj/70*100)+"%";$("answered").textContent=answeredCount()+"/40";$("essayCount").textContent="5";window.examResult={student,kelas,objectiveScore:obj,objectiveMax:70,answers,questions:Q.map((q,i)=>({number:i+1,type:q.t,question:q.q,options:q.o||[],answer:answers[i]??"",key:q.a||null,essayGuide:q.e||""})),startedAt:startAt,finishedAt:Date.now(),durationSeconds:Math.round((Date.now()-startAt)/1000),essayPending:true};}
 $("review").onclick=()=>{show("exam");idx=0;render()};
 $("save").onclick=async()=>{
  let st=$("saveStatus");st.classList.remove("hidden");
@@ -142,11 +142,12 @@ $("save").onclick=async()=>{
    status:"completed",
    score:window.examResult.objectiveScore,
    objectiveMax:70,
+   objectiveBreakdown:window.examResult.questions.filter(q=>q.type!=="essay").map(q=>({number:q.number,type:q.type,answer:q.answer,key:q.key,correct:(q.type==="pg"||q.type==="pgc")?(Array.isArray(q.answer)&&Array.isArray(q.key)&&q.answer.length===q.key.length&&q.key.every(n=>q.answer.includes(n))):(q.type==="is"?((q.key||[]).some(k=>norm(k)===norm(q.answer))):null)})),
    completedCount:40,
    exam:"SAS IPAS Kelas VI Semester Ganjil 2026/2027",
    answers:window.examResult.answers,
    questionDetails:window.examResult.questions.map(q=>({
-    number:q.number,type:q.type,question:q.question,answer:q.answer,
+    number:q.number,type:q.type,question:q.question,options:q.options||[],answer:q.answer,
     key:q.key,essayGuide:q.essayGuide
    })),
    essayPending:true,
