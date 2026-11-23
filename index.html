@@ -18,6 +18,24 @@
 .mapgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:9px;margin:16px 0}.maptile{padding:12px 8px;text-align:center;border:1px solid var(--line);border-radius:14px;background:#ffffff0a;font-size:12px}.maptile b{display:block;font-size:20px;margin-bottom:4px}.resultbig{font-size:48px;font-weight:900;color:var(--gold)}.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0}.summary>div{background:#ffffff0b;border:1px solid var(--line);padding:14px;border-radius:14px}.summary strong{display:block;font-size:22px}.summary span{font-size:11px;color:var(--muted)}
 
 .maze-layout{display:grid;grid-template-columns:1.05fr .95fr;gap:18px;align-items:start}.maze-side,.question-side{background:#07182caa;border:1px solid var(--line);border-radius:18px;padding:14px;min-width:0}.maze-instructions{display:grid;gap:5px;margin-bottom:12px;font-size:13px;line-height:1.5}.maze-instructions b{color:var(--gold);font-size:15px}.maze-instructions span{color:var(--muted)}.maze{display:block;width:min(100%,500px);aspect-ratio:1;margin:auto;background:#f4f0df;border:5px solid #d8cda9;border-radius:12px;overflow:hidden;box-shadow:inset 0 0 0 2px #fff9}.maze svg{display:block;width:100%;height:100%}.maze-wall{fill:none;stroke:#24313a;stroke-width:5.5;stroke-linecap:square;stroke-linejoin:miter}.maze-item{font-size:25px;text-anchor:middle;dominant-baseline:central}.maze-player{filter:drop-shadow(0 2px 2px #3338)}.maze-guardian{font-size:25px;text-anchor:middle;dominant-baseline:central;filter:drop-shadow(0 2px 2px #3337)}.maze-exit{font-size:27px}.maze-fog{fill:#18283b;opacity:.88}.maze-glow{filter:drop-shadow(0 0 5px #e7a62c)}.move-pad{display:grid;justify-items:center;gap:5px;margin:12px}.move-pad>div{display:flex;gap:7px}.move{width:48px;height:42px;padding:5px;background:#173653;color:white;border:1px solid #ffffff22;font-size:18px;touch-action:manipulation}.question-side{min-height:420px}.question-side .question{min-height:90px}
+/* Soal kotak rahasia tampil sebagai modal di atas permainan pada HP, tablet, dan desktop. */
+#exam{backdrop-filter:none}
+body.question-modal-open{overflow:hidden;overscroll-behavior:none}
+.question-side.modal-open{
+ position:fixed;z-index:99999;top:50%;left:50%;transform:translate(-50%,-50%);
+ width:min(760px,calc(100vw - 28px));max-height:calc(100vh - 28px);max-height:calc(100dvh - 28px);
+ overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;
+ padding:clamp(18px,3vw,30px);border:1px solid rgba(255,255,255,.2);border-radius:22px;
+ background:linear-gradient(155deg,#102642 0%,#07182c 100%);
+ box-shadow:0 22px 70px #000c,0 0 0 100vmax rgba(1,8,20,.84);
+}
+.question-side.modal-open .question{min-height:0}
+@media(max-width:760px){
+ .question-side.modal-open{width:calc(100vw - 20px);max-height:calc(100vh - 20px);max-height:calc(100dvh - 20px);border-radius:18px;padding:18px 15px calc(18px + env(safe-area-inset-bottom));}
+ .question-side.modal-open .options{grid-template-columns:1fr}
+ .question-side.modal-open .actions{gap:12px}
+ .question-side.modal-open #next{flex:1}
+}
 @media(max-width:760px){.maze-layout{grid-template-columns:1fr}.maze{width:min(100%,420px)}.question-side{min-height:0}}
 
 @media(max-width:760px){.hero{grid-template-columns:1fr}.hero-art{height:230px;order:-1}.explorer{font-size:58px}.options{grid-template-columns:1fr}.mapgrid{grid-template-columns:repeat(2,1fr)}.top{align-items:flex-start}.pill{font-size:11px}.summary{grid-template-columns:1fr 1fr}.hero{min-height:auto}}
@@ -298,6 +316,8 @@ function drawMaze(){
 }
 function hasAnswer(i){let q=Q[i];return q.t==="pg"||q.t==="pgc"?(answers[i]||[]).length>0:String(answers[i]||"").trim().length>0}
 function renderQuestion(){
+ // Tampilkan soal sebagai modal di atas seluruh area permainan.
+ $("question-side").classList.add("modal-open");document.body.classList.add("question-modal-open");
  let q=Q[idx],L=LEVELS[activeLevel];$("zoneIcon").textContent=L.icon;$("zoneName").textContent=L.name;$("zoneLabel").textContent=L.title;$("qmeta").textContent="KOTAK RAHASIA "+(idx-L.from+1)+"/"+(L.to-L.from)+" • "+({pg:"PILIHAN GANDA",pgc:"PILIHAN GANDA KOMPLEKS",is:"ESAI SINGKAT",essay:"URAIAN"})[q.t];$("question").textContent=q.q;$("counter").textContent=opened.size+"/"+chests.length;$("bar").style.width=((idx+1)/40*100)+"%";$("feedback").classList.add("hidden");
  let area=$("answerArea");area.innerHTML="";
  if(q.t==="pg"||q.t==="pgc"){let opts=document.createElement("div");opts.className="options";q.o.forEach((v,i)=>{let b=document.createElement("button");b.className="opt";if((answers[idx]||[]).includes(i))b.classList.add("selected");b.innerHTML='<span class="letter">'+String.fromCharCode(65+i)+'</span><span></span>';b.querySelector("span:last-child").textContent=v;b.onclick=()=>{let a=answers[idx]||[];answers[idx]=q.t==="pg"?[i]:(a.includes(i)?a.filter(x=>x!==i):[...a,i]);renderQuestion()};opts.append(b)});area.append(opts)}
@@ -306,7 +326,7 @@ function renderQuestion(){
 }
 function render(){
  let L=LEVELS[activeLevel];$("challengeTitle").textContent=L.name;$("challengeText").textContent=L.desc;drawMaze();
- if(questionOpen)renderQuestion();else{$("zoneIcon").textContent=L.icon;$("zoneName").textContent=L.name;$("zoneLabel").textContent=L.title;$("qmeta").textContent="KOTAK RAHASIA • JELAJAHI LABIRIN";$("question").textContent="Gerakkan Mario melalui lorong, hindari penjaga, lalu dekati kotak 📦 untuk membuka soal!";$("answerArea").innerHTML='<div class="feedback">Setelah menjawab, kotak akan berubah menjadi ✓. Buka semua kotak lalu temukan pintu keluar 🏁.</div>';$("counter").textContent=opened.size+"/"+chests.length;$("hint").textContent="Gunakan tombol arah atau panah keyboard. Hindari 🐍 🧟 🦂 dan penjaga lainnya!";$("next").disabled=true;$("next").textContent="Cari kotak rahasia"}
+ if(questionOpen)renderQuestion();else{$("question-side").classList.remove("modal-open");document.body.classList.remove("question-modal-open");$("zoneIcon").textContent=L.icon;$("zoneName").textContent=L.name;$("zoneLabel").textContent=L.title;$("qmeta").textContent="KOTAK RAHASIA • JELAJAHI LABIRIN";$("question").textContent="Gerakkan Mario melalui lorong, hindari penjaga, lalu dekati kotak 📦 untuk membuka soal!";$("answerArea").innerHTML='<div class="feedback">Setelah menjawab, kotak akan berubah menjadi ✓. Buka semua kotak lalu temukan pintu keluar 🏁.</div>';$("counter").textContent=opened.size+"/"+chests.length;$("hint").textContent="Gunakan tombol arah atau panah keyboard. Hindari 🐍 🧟 🦂 dan penjaga lainnya!";$("next").disabled=true;$("next").textContent="Cari kotak rahasia"}
  $("prev").disabled=!questionOpen;updateScore()
 }
 function movePlayer(dr,dc){
