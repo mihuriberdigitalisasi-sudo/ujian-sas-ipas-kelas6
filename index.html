@@ -16,31 +16,82 @@
 .gamehead{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:16px}.stats{display:flex;gap:8px;flex-wrap:wrap}.stat{background:#07182c;border:1px solid var(--line);padding:9px 12px;border-radius:12px;font-size:13px}.stat b{color:var(--gold)}.progress{height:9px;background:#ffffff16;border-radius:99px;overflow:hidden;margin:12px 0 20px}.progress>div{height:100%;background:linear-gradient(90deg,#62e6a5,#72e5e0);width:0;transition:width .35s}
 .zone{display:flex;align-items:center;gap:12px;margin-bottom:12px}.zoneicon{width:48px;height:48px;border-radius:15px;background:#ffffff12;display:grid;place-items:center;font-size:25px}.zone small{color:var(--cyan);font-weight:800;letter-spacing:.12em}.zone h2{margin:2px 0;font-size:22px}.qmeta{color:var(--muted);font-size:12px;margin-bottom:10px}.question{font-size:clamp(18px,2.2vw,23px);line-height:1.48;font-weight:750;margin:12px 0 18px}.options{display:grid;grid-template-columns:1fr 1fr;gap:10px}.opt{border:1px solid #ffffff22;background:#102b47;border-radius:14px;padding:14px;text-align:left;color:#edf6ff;font:inherit;cursor:pointer;line-height:1.45;display:flex;gap:10px;align-items:flex-start}.opt:hover{border-color:#72e5e0}.opt.selected{border-color:var(--gold);background:#5a4825aa}.letter{flex:none;width:26px;height:26px;border-radius:8px;background:#ffffff16;display:grid;place-items:center;font-weight:900;color:var(--gold)}.answerText{min-height:105px;resize:vertical}.actions{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:20px;flex-wrap:wrap}.feedback{margin-top:14px;padding:12px 14px;border-radius:12px;background:#ffffff0c;color:#dce9f8;font-size:13px;line-height:1.6}.feedback.good{border:1px solid #62e6a566}.feedback.bad{border:1px solid #ff7d8866}
 .mapgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:9px;margin:16px 0}.maptile{padding:12px 8px;text-align:center;border:1px solid var(--line);border-radius:14px;background:#ffffff0a;font-size:12px}.maptile b{display:block;font-size:20px;margin-bottom:4px}.resultbig{font-size:48px;font-weight:900;color:var(--gold)}.summary{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:18px 0}.summary>div{background:#ffffff0b;border:1px solid var(--line);padding:14px;border-radius:14px}.summary strong{display:block;font-size:22px}.summary span{font-size:11px;color:var(--muted)}
+
+.maze-layout{display:grid;grid-template-columns:1.05fr .95fr;gap:18px;align-items:start}.maze-side,.question-side{background:#07182caa;border:1px solid var(--line);border-radius:18px;padding:14px;min-width:0}.maze-instructions{display:grid;gap:5px;margin-bottom:12px;font-size:13px;line-height:1.5}.maze-instructions b{color:var(--gold);font-size:15px}.maze-instructions span{color:var(--muted)}.maze{display:block;width:min(100%,500px);aspect-ratio:1;margin:auto;background:#f4f0df;border:5px solid #d8cda9;border-radius:12px;overflow:hidden;box-shadow:inset 0 0 0 2px #fff9}.maze svg{display:block;width:100%;height:100%}.maze-wall{fill:none;stroke:#24313a;stroke-width:5.5;stroke-linecap:square;stroke-linejoin:miter}.maze-item{font-size:25px;text-anchor:middle;dominant-baseline:central}.maze-player{filter:drop-shadow(0 2px 2px #3338)}.maze-guardian{font-size:25px;text-anchor:middle;dominant-baseline:central;filter:drop-shadow(0 2px 2px #3337)}.maze-exit{font-size:27px}.maze-fog{fill:#18283b;opacity:.88}.maze-glow{filter:drop-shadow(0 0 5px #e7a62c)}.move-pad{display:grid;justify-items:center;gap:5px;margin:12px}.move-pad>div{display:flex;gap:7px}.move{width:48px;height:42px;padding:5px;background:#173653;color:white;border:1px solid #ffffff22;font-size:18px;touch-action:manipulation}.question-side{min-height:420px}.question-side .question{min-height:90px}
+@media(max-width:760px){.maze-layout{grid-template-columns:1fr}.maze{width:min(100%,420px)}.question-side{min-height:0}}
+
 @media(max-width:760px){.hero{grid-template-columns:1fr}.hero-art{height:230px;order:-1}.explorer{font-size:58px}.options{grid-template-columns:1fr}.mapgrid{grid-template-columns:repeat(2,1fr)}.top{align-items:flex-start}.pill{font-size:11px}.summary{grid-template-columns:1fr 1fr}.hero{min-height:auto}}
+
+/* Tampilan pembuka yang lebih sederhana dan elegan */
+.start-simple{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(250px,.75fr);gap:clamp(28px,5vw,72px);align-items:center;min-height:0!important;padding:clamp(28px,5vw,58px)!important;background:linear-gradient(135deg,rgba(15,29,52,.98),rgba(10,23,42,.98))!important}
+.start-simple .start-content{max-width:720px}
+.start-simple .eyebrow{display:flex;align-items:center;gap:9px;font-size:11px;letter-spacing:2px}
+.eyebrow-dot{width:7px;height:7px;border-radius:50%;background:var(--gold);box-shadow:0 0 12px var(--gold)}
+.start-simple h1{font-size:clamp(42px,5.4vw,66px)!important;line-height:1.04!important;letter-spacing:-2.5px;margin:18px 0 14px!important}
+.start-simple .start-lead{font-size:15px;line-height:1.75;max-width:620px;margin:0 0 24px;color:#c3cede}
+.level-strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;margin:0 0 27px}
+.level-strip>div{display:flex;flex-direction:column;gap:7px;padding:12px 13px;border:1px solid rgba(174,193,219,.17);border-radius:12px;background:rgba(255,255,255,.035);min-height:66px}
+.level-strip span{font-size:10px;color:var(--gold);font-weight:800;letter-spacing:1px}
+.level-strip b{font-size:11px;line-height:1.35;color:#e4eaf4}
+.start-form{display:grid;grid-template-columns:1.3fr .8fr auto;gap:12px;align-items:end}
+.start-form .field{margin:0}
+.start-form label{font-size:12px;color:#d3ddec}
+.start-form input,.start-form select{height:48px;background:#09172b;border:1px solid #34445b;border-radius:11px}
+.start-form .btn{height:48px;white-space:nowrap;padding:0 20px}
+.start-simple .start-foot{font-size:11px;line-height:1.65;color:#8999af;margin:17px 0 0;max-width:670px}
+.start-aside{position:relative;overflow:hidden;min-height:300px;padding:30px;border:1px solid rgba(255,255,255,.12);border-radius:18px;background:radial-gradient(circle at 90% 10%,rgba(255,203,99,.15),transparent 34%),linear-gradient(150deg,#173e55,#102c43 68%,#102538);display:flex;flex-direction:column;justify-content:center}
+.start-aside:after{content:"";position:absolute;width:210px;height:210px;border:1px solid rgba(255,255,255,.08);border-radius:50%;right:-70px;bottom:-100px;box-shadow:0 0 0 22px rgba(255,255,255,.025),0 0 0 46px rgba(255,255,255,.02)}
+.aside-mark{width:43px;height:43px;display:grid;place-items:center;border-radius:13px;background:linear-gradient(135deg,#ffd16c,#ff9b62);color:#10233b;font-size:25px;margin-bottom:27px}
+.aside-kicker{font-size:10px;letter-spacing:2px;font-weight:800;color:#ffd16c}
+.aside-title{font-size:30px;line-height:1.15;font-weight:850;color:#f5f7fb;margin:12px 0}
+.start-aside p{font-size:13px;line-height:1.7;color:#c0cfdd;max-width:260px;margin:0}
+.aside-stats{display:flex;align-items:center;gap:18px;margin-top:30px}
+.aside-stats div{display:flex;flex-direction:column;gap:3px}
+.aside-stats b{font-size:23px;color:#fff}
+.aside-stats span{font-size:10px;color:#aebed0}
+.aside-stats i{height:27px;width:1px;background:rgba(255,255,255,.2)}
+@media(max-width:850px){.start-simple{grid-template-columns:1fr!important}.start-aside{min-height:210px}.start-aside:after{right:-40px}.start-form{grid-template-columns:1fr 1fr}.start-form .btn{grid-column:1/-1}.start-simple h1{font-size:48px!important}}
+@media(max-width:520px){.start-simple{padding:22px!important}.level-strip{grid-template-columns:repeat(2,minmax(0,1fr))}.start-form{grid-template-columns:1fr}.start-form .btn{grid-column:auto}.start-aside{min-height:190px;padding:23px}.start-simple h1{font-size:42px!important}}
+
 </style>
 </head>
 <body>
 <canvas id="scene"></canvas>
 <div class="wrap">
 <header class="top"><div class="brand"><div class="logo">✦</div><div><small>UJIAN SUMATIF AKHIR SEMESTER</small><b>EKSPEDISI PENGETAHUAN</b></div></div><div class="pill">IPAS • KELAS VI • GANJIL 2026/2027</div></header>
-<section id="start" class="panel hero">
- <div><div class="eyebrow">Misi khusus • 90 menit</div><h1>Jelajahi Dunia<br><span style="color:var(--gold)">Pengetahuan!</span></h1>
- <p>Masuki ekspedisi seru melewati empat wilayah tantangan. Kumpulkan bintang dengan menjawab soal secara teliti. Selesaikan 40 soal untuk menuntaskan ujian.</p>
- <div class="mapgrid"><div class="maptile"><b>🫁</b>Sistem Pernapasan</div><div class="maptile"><b>🍎</b>Sistem Pencernaan</div><div class="maptile"><b>⚔️</b>Pahlawan</div><div class="maptile"><b>🌿</b>Kearifan Lokal</div></div>
- <div class="field"><label for="student">Nama lengkap siswa</label><input id="student" maxlength="80" placeholder="Masukkan nama lengkap"></div>
- <div class="field"><label for="classroom">Kelas</label><select id="classroom"><option value="">Pilih kelas</option><option>VI-A</option><option>VI-B</option><option>VI-C</option><option>VI</option></select></div>
- <button class="btn" id="begin">🚀 Mulai Ekspedisi Ujian</button>
- <p class="note">Kerjakan sendiri dengan jujur. Pilihan ganda kompleks dapat memiliki lebih dari satu jawaban benar. Soal uraian akan disimpan untuk diperiksa guru. Setelah selesai, tekan tombol Simpan Nilai agar hasil masuk ke database sekolah.</p></div>
- <div class="hero-art"><div class="sun"></div><div class="mount"></div><div class="mount m2"></div><div class="ground"></div><div class="explorer">🧑‍🚀</div><span class="spark s1">✦</span><span class="spark s2">✧</span><span class="spark s3">✦</span></div>
+<section id="start" class="panel hero start-simple" aria-hidden="false">
+ <div class="start-content">
+  <div class="eyebrow"><span class="eyebrow-dot"></span> UJIAN SUMATIF AKHIR SEMESTER • 90 MENIT</div>
+  <h1>Ekspedisi<br><span style="color:var(--gold)">Pengetahuan.</span></h1>
+  <p class="start-lead">Selesaikan 40 soal dalam petualangan labirin empat level. Temukan kotak rahasia, hadapi penjaga, dan kumpulkan bintang.</p>
+  <div class="level-strip">
+   <div><span>01</span><b>Pilihan Ganda</b></div>
+   <div><span>02</span><b>Pilihan Ganda Kompleks</b></div>
+   <div><span>03</span><b>Isian</b></div>
+   <div><span>04</span><b>Uraian</b></div>
+  </div>
+  <div class="start-form">
+   <div class="field"><label for="student">Nama lengkap siswa</label><input id="student" maxlength="80" placeholder="Masukkan nama lengkap"></div>
+   <div class="field"><label for="classroom">Kelas</label><select id="classroom"><option value="">Pilih kelas</option><option>VI-A</option><option>VI-B</option><option>VI-C</option><option>VI</option></select></div>
+   <button class="btn" id="begin">Mulai Ujian <span aria-hidden="true">→</span></button>
+  </div>
+  <p class="start-foot">Kerjakan dengan jujur dan teliti. Jawaban uraian akan diperiksa oleh guru. Pastikan nama dan kelas sudah benar sebelum memulai.</p>
+ </div>
+ <div class="start-aside">
+  <div class="aside-mark">✦</div>
+  <div class="aside-kicker">SIAPKAN DIRIMU</div>
+  <div class="aside-title">Empat level.<br>Satu misi.</div>
+  <p>Jelajahi lorong, pecahkan tantangan, dan buktikan pengetahuanmu.</p>
+  <div class="aside-stats"><div><b>40</b><span>Soal</span></div><i></i><div><b>04</b><span>Level</span></div><i></i><div><b>90</b><span>Menit</span></div></div>
+ </div>
 </section>
-<section id="exam" class="panel hidden">
- <div class="gamehead"><div class="zone"><div class="zoneicon" id="zoneIcon">🍎</div><div><small id="zoneLabel">ZONA 1</small><h2 id="zoneName">Lembah Pencernaan</h2></div></div><div class="stats"><div class="stat">⏱ <b id="timer">90:00</b></div><div class="stat">⭐ Skor <b id="score">0</b></div><div class="stat">📍 <b id="counter">1/40</b></div></div></div>
- <div class="progress"><div id="bar"></div></div>
- <div class="qmeta" id="qmeta">PILIHAN GANDA • SOAL 1</div><div class="question" id="question"></div><div id="answerArea"></div>
- <div id="feedback" class="feedback hidden"></div>
- <div class="actions"><button class="btn secondary" id="prev">← Sebelumnya</button><span class="note" id="hint">Pilih jawaban terbaik.</span><button class="btn" id="next">Simpan jawaban & lanjut →</button></div>
+<section id="exam" class="panel hidden" aria-hidden="true">
+<div class="gamehead"><div class="zone"><div class="zoneicon" id="zoneIcon">🧭</div><div><small id="zoneLabel">LEVEL 1</small><h2 id="zoneName">Labirin Pilihan Ganda</h2></div></div><div class="stats"><div class="stat">⏱ <b id="timer">90:00</b></div><div class="stat">⭐ Skor <b id="score">0</b></div><div class="stat">📦 <b id="counter">0/20</b></div></div></div>
+<div class="progress"><div id="bar"></div></div>
+<div class="maze-layout"><div class="maze-side"><div class="maze-instructions"><b id="challengeTitle">Misi labirin</b><span id="challengeText">Temukan kotak rahasia.</span></div><div id="maze" class="maze"></div><div class="move-pad"><button class="move" data-move="up">▲</button><div><button class="move" data-move="left">◀</button><button class="move" data-move="down">▼</button><button class="move" data-move="right">▶</button></div></div><p class="note">Gerakkan penjelajah dengan tombol panah keyboard atau tombol arah. Dekati 📦 untuk membuka soal. <span id="soundStatus">🔊 Efek suara aktif</span></p></div>
+<div class="question-side"><div class="qmeta" id="qmeta">KOTAK RAHASIA</div><div id="question" class="question">Jelajahi labirin untuk menemukan kotak rahasia!</div><div id="answerArea"><div class="feedback">Setiap kotak menyimpan satu soal ujian.</div></div><div id="feedback" class="feedback hidden"></div><div class="actions"><span class="note" id="hint">Cari kotak rahasia.</span><button class="btn" id="next" disabled>Kunci jawaban & lanjut</button></div><button class="btn secondary" id="prev" style="margin-top:10px">Tutup soal</button></div></div>
 </section>
-<section id="finish" class="panel hidden">
+<section id="finish" class="panel hidden" aria-hidden="true">
  <div class="eyebrow">Ekspedisi selesai</div><h1 style="margin:8px 0">Hebat, <span id="doneName" style="color:var(--gold)"></span>!</h1><p class="note">Semua jawaban telah direkap. Tekan tombol Simpan Nilai agar hasil ujian dikirim ke Firebase Cloud.</p>
  <div class="resultbig" id="percent">—</div><div class="summary"><div><strong id="objScore">0/80</strong><span>Skor otomatis sementara (maks. 70)</span></div><div><strong id="answered">40/40</strong><span>Soal dijawab</span></div><div><strong id="essayCount">5</strong><span>Uraian menunggu koreksi</span></div></div>
  <div class="feedback">Nilai objektif dihitung otomatis dari pilihan ganda, pilihan ganda kompleks, dan isian singkat. Lima jawaban uraian disimpan lengkap dan perlu dinilai guru agar nilai akhir maksimal 100 dapat ditetapkan secara adil.</div>
@@ -109,24 +160,175 @@ const Q=[
 {t:"essay",z:4,q:"Dua teman berselisih karena masalah sepele hingga saling mengejek. Rancang solusi penyelesaian berdasarkan tiga nilai kepahlawanan!",e:"Uraian: contoh nilai keberanian mengakui kesalahan/menyampaikan kebenaran; rela berkorban atau mengalah demi damai; persatuan/kerja sama atau tanggung jawab; uraikan langkah dialog, saling meminta maaf, dan kesepakatan."},
 {t:"essay",z:4,q:"Jelaskan penyebab sembelit yang dapat terjadi karena pola makan, serta kebiasaan yang dapat dilakukan untuk menjaga kesehatan sistem pencernaan!",e:"Uraian: kurang serat dan cairan, kurang aktivitas, kebiasaan menahan BAB dapat menyebabkan feses keras/sulit keluar; makan sayur-buah, cukup minum, aktif bergerak, dan tidak menahan BAB."}
 ];
-const zones={1:["🍎","Lembah Pencernaan"],2:["⚔️","Benteng Tantangan"],3:["🌬️","Hutan Pernapasan"],4:["🌟","Puncak Pengetahuan"]};
+const LEVELS=[
+{from:0,to:20,title:"LEVEL 1 • PILIHAN GANDA",name:"Labirin Penjelajah",icon:"🧭",desc:"Kumpulkan 20 kotak rahasia. Temukan soal pilihan ganda di sepanjang lorong.",kind:"normal"},
+{from:20,to:25,title:"LEVEL 2 • PILIHAN GANDA KOMPLEKS",name:"Benteng Penjaga",icon:"🛡️",desc:"Pilih SEMUA jawaban yang benar. Penjaga bergerak setiap tiga langkah!",kind:"guard"},
+{from:25,to:35,title:"LEVEL 3 • ESAI",name:"Hutan Kabut",icon:"🌫️",desc:"Lorong diselimuti kabut. Dekati kotak untuk melihatnya dan tulis jawaban esai singkat.",kind:"fog"},
+{from:35,to:40,title:"LEVEL 4 • URAIAN",name:"Puncak Tantangan",icon:"🔥",desc:"Level tersulit! Waspadai penjaga dan jebakan bergerak sambil menjawab soal uraian.",kind:"final"}];
 let idx=0,answers={},startAt=0,seconds=5400,tick=null,student="",kelas="";
+let activeLevel=0,grid=[],player={r:1,c:1},chests=[],opened=new Set(),guard={r:9,c:9},trap={r:5,c:5},guardians=[],steps=0,questionOpen=false,enemyTimer=null,audioCtx=null,soundEnabled=true;
 const $=id=>document.getElementById(id);
 function norm(s){return String(s||"").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"").replace(/[^\p{L}\p{N}\s]/gu," ").replace(/\s+/g," ").trim()}
-function show(id){["start","exam","finish"].forEach(x=>$(x).classList.toggle("hidden",x!==id))}
-function render(){let q=Q[idx],z=zones[q.z];$("zoneIcon").textContent=z[0];$("zoneName").textContent=z[1];$("zoneLabel").textContent="WILAYAH "+q.z;$("qmeta").textContent=({pg:"PILIHAN GANDA",pgc:"PILIHAN GANDA KOMPLEKS • PILIH SEMUA JAWABAN BENAR",is:"ISIAN SINGKAT",essay:"URAIAN"})[q.t]+" • SOAL "+(idx+1);$("question").textContent=q.q;$("counter").textContent=(idx+1)+"/40";$("bar").style.width=((idx+1)/40*100)+"%";$("prev").disabled=idx===0;$("feedback").classList.add("hidden");let area=$("answerArea");area.innerHTML="";
-if(q.t==="pg"||q.t==="pgc"){let opts=document.createElement("div");opts.className="options";q.o.forEach((v,i)=>{let b=document.createElement("button");b.className="opt";let selected=(answers[idx]||[]).includes(i);if(selected)b.classList.add("selected");b.innerHTML='<span class="letter">'+String.fromCharCode(65+i)+'</span><span></span>';b.querySelector("span:last-child").textContent=v;b.onclick=()=>{let a=answers[idx]||[];if(q.t==="pg")a=[i];else a=a.includes(i)?a.filter(n=>n!==i):[...a,i];answers[idx]=a;render();};opts.append(b)});area.append(opts)
-}else{let ta=document.createElement("textarea");ta.className="answerText";ta.placeholder=q.t==="is"?"Ketik jawaban singkat di sini…":"Tuliskan jawaban dengan kalimat lengkap dan jelas…";ta.value=answers[idx]||"";ta.oninput=()=>answers[idx]=ta.value;area.append(ta)}
-$("hint").textContent=q.t==="pgc"?"Pilih lebih dari satu jawaban jika diperlukan.":q.t==="essay"?"Jawaban uraian akan diperiksa guru.":"Periksa kembali jawaban sebelum melanjutkan.";
-$("next").textContent=idx===39?"Selesaikan ujian →":"Simpan jawaban & lanjut →";updateScore()}
+function show(id){
+ ["start","exam","finish"].forEach(x=>{
+  const el=$(x),active=x===id;
+  el.classList.toggle("hidden",!active);
+  el.setAttribute("aria-hidden",active?"false":"true");
+ });
+ window.scrollTo({top:0,behavior:"instant"});
+}
+function shuffle(a){for(let i=a.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+
+function playTone(freq=440,duration=.09,type="sine",volume=.045,delay=0){
+ if(!soundEnabled)return;
+ try{
+  const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;
+  audioCtx=audioCtx||new AC();if(audioCtx.state==="suspended")audioCtx.resume();
+  const o=audioCtx.createOscillator(),g=audioCtx.createGain(),now=audioCtx.currentTime+delay;
+  o.type=type;o.frequency.setValueAtTime(freq,now);
+  g.gain.setValueAtTime(.0001,now);g.gain.exponentialRampToValueAtTime(volume,now+.012);
+  g.gain.exponentialRampToValueAtTime(.0001,now+duration);
+  o.connect(g);g.connect(audioCtx.destination);o.start(now);o.stop(now+duration+.02);
+ }catch(e){}
+}
+function soundWalk(){playTone(210,.045,"triangle",.025);playTone(150,.04,"triangle",.018,.035)}
+function soundChest(){[523,659,784].forEach((f,i)=>playTone(f,.13,"sine",.055,i*.09))}
+function soundSaved(){[392,523,659,784].forEach((f,i)=>playTone(f,.16,"triangle",.05,i*.085))}
+function soundHit(){playTone(180,.18,"sawtooth",.035);playTone(110,.22,"sawtooth",.025,.12)}
+function soundLevel(){[523,659,784,1047].forEach((f,i)=>playTone(f,.22,"sine",.06,i*.14))}
+function startEnemyMotion(){
+ if(enemyTimer)clearInterval(enemyTimer);
+ // Setiap penjaga memilih tujuan yang jauh di lorong yang saling terhubung,
+ // lalu mengikuti jalur terpendek. Jadi mereka tidak hanya mondar-mandir
+ // pada satu atau dua petak seperti gerakan acak sebelumnya.
+ function moveAlongLongRoute(enemy){
+  const key=p=>`${p.r},${p.c}`;
+  const dirs=[[0,1],[0,-1],[1,0],[-1,0]];
+  const valid=p=>p.r>=0&&p.r<11&&p.c>=0&&p.c<11&&grid[p.r][p.c]===0;
+  const bfs=(origin)=>{
+   const queue=[origin],prev=new Map([[key(origin),null]]),dist=new Map([[key(origin),0]]);
+   for(let h=0;h<queue.length;h++){
+    const cur=queue[h];
+    for(const [dr,dc] of dirs){
+     const nxt={r:cur.r+dr,c:cur.c+dc},k=key(nxt);
+     if(valid(nxt)&&!prev.has(k)){
+      prev.set(k,key(cur));dist.set(k,dist.get(key(cur))+1);queue.push(nxt);
+     }
+    }
+   }
+   return {prev,dist};
+  };
+  if(!enemy.target||key(enemy)===key(enemy.target)){
+   const map=bfs(enemy),choices=[...map.dist.entries()]
+    .filter(([k,d])=>d>=5&&k!=="1,1"&&k!=="10,9")
+    .sort((a,b)=>b[1]-a[1]);
+   if(choices.length){
+    const farthest=choices[0][1],pool=choices.filter(x=>x[1]>=farthest-3);
+    const chosen=pool[Math.floor(Math.random()*pool.length)][0];
+    const [r,c]=chosen.split(",").map(Number);enemy.target={r,c};
+   }else enemy.target=null;
+  }
+  if(!enemy.target)return;
+  const map=bfs(enemy),targetKey=key(enemy.target);
+  if(!map.prev.has(targetKey)){enemy.target=null;return}
+  let stepKey=targetKey;
+  while(map.prev.get(stepKey)&&map.prev.get(stepKey)!==key(enemy))stepKey=map.prev.get(stepKey);
+  if(map.prev.get(stepKey)===key(enemy)){
+   const [r,c]=stepKey.split(",").map(Number);enemy.r=r;enemy.c=c;
+  }else enemy.target=null;
+ }
+ enemyTimer=setInterval(()=>{
+  if($("exam").classList.contains("hidden")||questionOpen)return;
+  const kind=LEVELS[activeLevel].kind;
+  guardians.forEach(moveAlongLongRoute);
+  if(kind==="guard")moveAlongLongRoute(guard);
+  if(kind==="final")moveAlongLongRoute(trap);
+  const hit=guardians.some(g=>g.r===player.r&&g.c===player.c)||
+    (kind==="guard"&&guard.r===player.r&&guard.c===player.c)||
+    (kind==="final"&&trap.r===player.r&&trap.c===player.c);
+  if(hit){
+   player={r:1,c:1};soundHit();
+   $("feedback").textContent="Awas! Penjaga berpatroli jauh menyusuri lorong dan menangkapmu. Kamu kembali ke pintu masuk!";
+   $("feedback").classList.remove("hidden");
+  }
+  drawMaze();
+ },650);
+}
+function makeMaze(){
+ grid=Array.from({length:11},()=>Array(11).fill(1));let stack=[[1,1]];grid[1][1]=0;
+ while(stack.length){let [r,c]=stack[stack.length-1],dirs=shuffle([[0,2],[0,-2],[2,0],[-2,0]]),m=false;for(let [dr,dc] of dirs){let nr=r+dr,nc=c+dc;if(nr>0&&nr<10&&nc>0&&nc<10&&grid[nr][nc]){grid[r+dr/2][c+dc/2]=0;grid[nr][nc]=0;stack.push([nr,nc]);m=true;break}}if(!m)stack.pop()}
+ for(let k=0;k<10;k++){let r=1+Math.floor(Math.random()*9),c=1+Math.floor(Math.random()*9);if(grid[r][c]&&((grid[r-1][c]===0&&grid[r+1][c]===0)||(grid[r][c-1]===0&&grid[r][c+1]===0)))grid[r][c]=0}
+ grid[9][9]=0;grid[10][9]=0;player={r:1,c:1};guard={r:9,c:9};trap={r:5,c:5};steps=0;let floors=[];
+ for(let r=1;r<10;r++)for(let c=1;c<10;c++)if(grid[r][c]===0&&!(r===1&&c===1)&&!(r===9&&c===9))floors.push({r,c});
+ shuffle(floors);let L=LEVELS[activeLevel];chests=floors.slice(0,L.to-L.from);opened=new Set();questionOpen=false;
+ const creatures=["🐍","🧟","🦂","🐊","🦇","🐺","🐗","🦖"];
+ guardians=[];let used=new Set(["1,1","9,9","10,9",...chests.map(p=>`${p.r},${p.c}`)]);
+ let candidates=shuffle(floors.filter(p=>Math.abs(p.r-1)+Math.abs(p.c-1)>3&&Math.abs(p.r-9)+Math.abs(p.c-9)>2));
+ const guardCount=[3,5,6,8][activeLevel];
+ for(const p of candidates){if(guardians.length>=guardCount)break;let nearChest=chests.some(q=>Math.abs(q.r-p.r)+Math.abs(q.c-p.c)===1);if(nearChest&&!used.has(`${p.r},${p.c}`)){guardians.push({...p,emoji:creatures[guardians.length%creatures.length]});used.add(`${p.r},${p.c}`)}}
+}
+function drawMaze(){
+ const el=$("maze"),N=11,U=40,kind=LEVELS[activeLevel].kind;
+ let path="";
+ // Gambar batas antara lorong dan dinding sebagai garis kontinu, bukan ubin kotak.
+ for(let r=0;r<N;r++)for(let c=0;c<N;c++){
+  if(grid[r][c]!==0)continue;
+  let x=c*U,y=r*U;
+  if(r===0||grid[r-1][c]===1)path+=`M${x},${y}h${U}`;
+  if(c===N-1||grid[r][c+1]===1)path+=`M${x+U},${y}v${U}`;
+  if(r===N-1||grid[r+1][c]===1)path+=`M${x+U},${y+U}h-${U}`;
+  if(c===0||grid[r][c-1]===1)path+=`M${x},${y+U}v-${U}`;
+ }
+ let bits=`<svg viewBox="0 0 ${N*U} ${N*U}" role="img" aria-label="Labirin berliku dengan kotak rahasia dan pintu keluar"><rect width="440" height="440" fill="#f4f0df"/>`;
+ bits+=`<path class="maze-wall" d="${path}"/>`;
+ // Kabut pada level ketiga menutupi bagian lorong yang belum dijelajahi.
+ if(kind==="fog")for(let r=0;r<N;r++)for(let c=0;c<N;c++){
+  if(grid[r][c]===0&&Math.abs(player.r-r)+Math.abs(player.c-c)>2&&!(r===10&&c===9))
+   bits+=`<rect class="maze-fog" x="${c*U+2}" y="${r*U+2}" width="${U-4}" height="${U-4}"/>`;
+ }
+ // Kotak rahasia ditempatkan di tengah lorong.
+ chests.forEach((p,i)=>{let done=opened.has(i);bits+=`<text class="maze-item ${done?'':'maze-glow'}" x="${p.c*U+U/2}" y="${p.r*U+U/2}">${done?'⭐':'🎁'}</text>`});
+ if(kind==="guard")bits+=`<text class="maze-item" x="${guard.c*U+U/2}" y="${guard.r*U+U/2}">👾</text>`;
+ if(kind==="final")bits+=`<text class="maze-item" x="${trap.c*U+U/2}" y="${trap.r*U+U/2}">⚡</text>`;
+ bits+=`<text class="maze-exit" x="${9*U+U/2}" y="${10*U+U/2}">🏁</text>`;
+ guardians.forEach(g=>{bits+=`<text class="maze-guardian" x="${g.c*U+U/2}" y="${g.r*U+U/2}">${g.emoji}</text>`});
+ const px=player.c*U+U/2,py=player.r*U+U/2;
+ bits+=`<g class="maze-player" transform="translate(${px-15},${py-17})"><ellipse cx="15" cy="32" rx="12" ry="3" fill="#17213b" opacity=".25"/><path d="M5 12 Q5 1 15 1 Q25 1 25 12Z" fill="#e53935" stroke="#8e1717" stroke-width="1.5"/><rect x="4" y="10" width="23" height="5" rx="2" fill="#c62828"/><circle cx="15" cy="17" r="9" fill="#ffd0a1" stroke="#8b563d" stroke-width="1.2"/><circle cx="12" cy="16" r="1.2" fill="#222"/><circle cx="19" cy="16" r="1.2" fill="#222"/><path d="M12 21 Q15 24 19 21" fill="none" stroke="#8b3d35" stroke-width="1.2"/><path d="M7 26 Q15 22 23 26 L25 34 H5Z" fill="#2878d0" stroke="#174a8a" stroke-width="1.3"/><path d="M8 33 L14 33 L12 38 H5Z M17 33 L23 33 L26 38 H18Z" fill="#49302a" stroke="#241914" stroke-width="1"/></g></svg>`;
+ el.innerHTML=bits;
+}
+function hasAnswer(i){let q=Q[i];return q.t==="pg"||q.t==="pgc"?(answers[i]||[]).length>0:String(answers[i]||"").trim().length>0}
+function renderQuestion(){
+ let q=Q[idx],L=LEVELS[activeLevel];$("zoneIcon").textContent=L.icon;$("zoneName").textContent=L.name;$("zoneLabel").textContent=L.title;$("qmeta").textContent="KOTAK RAHASIA "+(idx-L.from+1)+"/"+(L.to-L.from)+" • "+({pg:"PILIHAN GANDA",pgc:"PILIHAN GANDA KOMPLEKS",is:"ESAI SINGKAT",essay:"URAIAN"})[q.t];$("question").textContent=q.q;$("counter").textContent=opened.size+"/"+chests.length;$("bar").style.width=((idx+1)/40*100)+"%";$("feedback").classList.add("hidden");
+ let area=$("answerArea");area.innerHTML="";
+ if(q.t==="pg"||q.t==="pgc"){let opts=document.createElement("div");opts.className="options";q.o.forEach((v,i)=>{let b=document.createElement("button");b.className="opt";if((answers[idx]||[]).includes(i))b.classList.add("selected");b.innerHTML='<span class="letter">'+String.fromCharCode(65+i)+'</span><span></span>';b.querySelector("span:last-child").textContent=v;b.onclick=()=>{let a=answers[idx]||[];answers[idx]=q.t==="pg"?[i]:(a.includes(i)?a.filter(x=>x!==i):[...a,i]);renderQuestion()};opts.append(b)});area.append(opts)}
+ else{let ta=document.createElement("textarea");ta.className="answerText";ta.placeholder=q.t==="is"?"Tuliskan jawaban esai singkat…":"Jelaskan jawabanmu secara lengkap dan runtut…";ta.value=answers[idx]||"";ta.oninput=()=>{answers[idx]=ta.value;$("next").disabled=!hasAnswer(idx)};area.append(ta)}
+ $("hint").textContent=q.t==="pgc"?"Pilih semua opsi yang benar.":q.t==="essay"?"Jawaban uraian akan diperiksa guru.":"Jawab soal untuk membuka kotak berikutnya.";$("next").disabled=!hasAnswer(idx);$("next").textContent="Simpan jawaban & lanjut";updateScore()
+}
+function render(){
+ let L=LEVELS[activeLevel];$("challengeTitle").textContent=L.name;$("challengeText").textContent=L.desc;drawMaze();
+ if(questionOpen)renderQuestion();else{$("zoneIcon").textContent=L.icon;$("zoneName").textContent=L.name;$("zoneLabel").textContent=L.title;$("qmeta").textContent="KOTAK RAHASIA • JELAJAHI LABIRIN";$("question").textContent="Gerakkan Mario melalui lorong, hindari penjaga, lalu dekati kotak 📦 untuk membuka soal!";$("answerArea").innerHTML='<div class="feedback">Setelah menjawab, kotak akan berubah menjadi ✓. Buka semua kotak lalu temukan pintu keluar 🏁.</div>';$("counter").textContent=opened.size+"/"+chests.length;$("hint").textContent="Gunakan tombol arah atau panah keyboard. Hindari 🐍 🧟 🦂 dan penjaga lainnya!";$("next").disabled=true;$("next").textContent="Cari kotak rahasia"}
+ $("prev").disabled=!questionOpen;updateScore()
+}
+function movePlayer(dr,dc){
+ if(questionOpen||$("exam").classList.contains("hidden"))return;let r=player.r+dr,c=player.c+dc;if(r<0||r>10||c<0||c>10||grid[r][c])return;player={r,c};steps++;soundWalk();let kind=LEVELS[activeLevel].kind;
+ let touched=guardians.find(g=>g.r===r&&g.c===c);if(touched){player={r:1,c:1};soundHit();$("feedback").textContent="Ups! Penjaga kotak rahasia menghadangmu. Coba jalur lain! Kamu kembali ke pintu masuk.";$("feedback").classList.remove("hidden");drawMaze();return;}
+ if(kind==="guard"&&steps%3===0){let opts=[[0,1],[0,-1],[1,0],[-1,0]].map(([a,b])=>({r:guard.r+a,c:guard.c+b})).filter(p=>p.r>0&&p.r<10&&p.c>0&&p.c<10&&!grid[p.r][p.c]);if(opts.length)guard=opts[Math.floor(Math.random()*opts.length)];if(player.r===guard.r&&player.c===guard.c){player={r:1,c:1};soundHit();$("feedback").textContent="Penjaga menghadangmu! Kamu kembali ke titik awal."; $("feedback").classList.remove("hidden")}}
+ if(kind==="final"&&steps%4===0){let opts=[[0,1],[0,-1],[1,0],[-1,0]].map(([a,b])=>({r:trap.r+a,c:trap.c+b})).filter(p=>p.r>0&&p.r<10&&p.c>0&&p.c<10&&!grid[p.r][p.c]);if(opts.length)trap=opts[Math.floor(Math.random()*opts.length)];if(player.r===trap.r&&player.c===trap.c){player={r:1,c:1};soundHit();$("feedback").textContent="Kamu terkena jebakan! Kembali ke titik awal."; $("feedback").classList.remove("hidden")}}
+ let ci=chests.findIndex((p,i)=>p.r===r&&p.c===c&&!opened.has(i));if(ci>=0){idx=LEVELS[activeLevel].from+ci;questionOpen=true;soundChest();renderQuestion()}
+ if(opened.size===chests.length&&r===10&&c===9)nextLevel();drawMaze()
+}
+function unlockNext(){if(!hasAnswer(idx)){alert("Jawab soal terlebih dahulu.");return}let local=idx-LEVELS[activeLevel].from;opened.add(local);questionOpen=false;soundSaved();if(opened.size===chests.length){$("feedback").textContent="Semua kotak level ini telah dibuka! Temukan pintu keluar 🏁 untuk lanjut."; $("feedback").classList.remove("hidden")}render()}
+function nextLevel(){soundLevel();activeLevel++;if(activeLevel>=4){finish();return}idx=LEVELS[activeLevel].from;makeMaze();render()}
 function isCorrect(i){let q=Q[i],a=answers[i];if(q.t==="pg"||q.t==="pgc"){if(!Array.isArray(a))return false;return a.length===q.a.length&&q.a.every(n=>a.includes(n))}if(q.t==="is"){let s=norm(a);return q.a.some(v=>norm(v)===s)}return false}
 function updateScore(){let s=0;Q.forEach((q,i)=>{if(q.t==="pg"&&isCorrect(i))s+=2;if(q.t==="pgc"&&isCorrect(i))s+=2;if(q.t==="is"&&isCorrect(i))s+=2});$("score").textContent=s}
 function answeredCount(){return Q.filter((q,i)=>q.t==="pg"||q.t==="pgc"?(answers[i]||[]).length>0:String(answers[i]||"").trim().length>0).length}
-$("begin").onclick=()=>{student=$("student").value.trim();kelas=$("classroom").value;if(!student||!kelas){alert("Masukkan nama lengkap dan pilih kelas terlebih dahulu.");return}startAt=Date.now();show("exam");render();tick=setInterval(()=>{seconds--;let m=Math.floor(seconds/60),s=seconds%60;$("timer").textContent=String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");if(seconds<=0){clearInterval(tick);finish()}},1000)};
-$("prev").onclick=()=>{if(idx>0){idx--;render()}};
-$("next").onclick=()=>{if(idx<39){idx++;render()}else finish()};
-function finish(){clearInterval(tick);let obj=0;Q.forEach((q,i)=>{if((q.t==="pg"||q.t==="pgc"||q.t==="is")&&isCorrect(i))obj+=2});show("finish");$("doneName").textContent=student;$("objScore").textContent=obj+"/70";$("percent").textContent=Math.round(obj/70*100)+"%";$("answered").textContent=answeredCount()+"/40";$("essayCount").textContent="5";window.examResult={student,kelas,objectiveScore:obj,objectiveMax:70,answers,questions:Q.map((q,i)=>({number:i+1,type:q.t,question:q.q,options:q.o||[],answer:answers[i]??"",key:q.a||null,essayGuide:q.e||""})),startedAt:startAt,finishedAt:Date.now(),durationSeconds:Math.round((Date.now()-startAt)/1000),essayPending:true};}
-$("review").onclick=()=>{show("exam");idx=0;render()};
+$("begin").onclick=()=>{student=$("student").value.trim();kelas=$("classroom").value;if(!student||!kelas){alert("Masukkan nama lengkap dan pilih kelas terlebih dahulu.");return}startAt=Date.now();activeLevel=0;idx=0;answers={};makeMaze();show("exam");render();startEnemyMotion();tick=setInterval(()=>{seconds--;let m=Math.floor(seconds/60),s=seconds%60;$("timer").textContent=String(m).padStart(2,"0")+":"+String(s).padStart(2,"0");if(seconds<=0){clearInterval(tick);finish()}},1000)};
+$("next").onclick=unlockNext;$("prev").onclick=()=>{questionOpen=false;render()};
+document.querySelectorAll("[data-move]").forEach(b=>b.addEventListener("click",()=>{let d=b.dataset.move;movePlayer(d==="up"?-1:d==="down"?1:0,d==="left"?-1:d==="right"?1:0)}));
+$("soundStatus").style.cursor="pointer";$("soundStatus").title="Klik untuk mengaktifkan atau mematikan suara";$("soundStatus").onclick=()=>{soundEnabled=!soundEnabled;$("soundStatus").textContent=soundEnabled?"🔊 Efek suara aktif":"🔇 Efek suara mati";if(soundEnabled)soundSaved()};
+document.addEventListener("keydown",e=>{let m={ArrowUp:[-1,0],ArrowDown:[1,0],ArrowLeft:[0,-1],ArrowRight:[0,1]};if(m[e.key]){e.preventDefault();movePlayer(...m[e.key])}});
+function finish(){clearInterval(tick);if(enemyTimer)clearInterval(enemyTimer);soundLevel();let obj=0;Q.forEach((q,i)=>{if((q.t==="pg"||q.t==="pgc"||q.t==="is")&&isCorrect(i))obj+=2});show("finish");$("doneName").textContent=student;$("objScore").textContent=obj+"/70";$("percent").textContent=Math.round(obj/70*100)+"%";$("answered").textContent=answeredCount()+"/40";$("essayCount").textContent="5";window.examResult={student,kelas,objectiveScore:obj,objectiveMax:70,gameMode:"maze",levelsCompleted:4,answers,questions:Q.map((q,i)=>({number:i+1,type:q.t,question:q.q,options:q.o||[],answer:answers[i]??"",key:q.a||null,essayGuide:q.e||""})),startedAt:startAt,finishedAt:Date.now(),durationSeconds:Math.round((Date.now()-startAt)/1000),essayPending:true};}
+$("review").onclick=()=>{show("exam");activeLevel=0;idx=0;makeMaze();questionOpen=true;renderQuestion();drawMaze()};
 $("save").onclick=async()=>{
  let st=$("saveStatus");st.classList.remove("hidden");
  if(!firebaseReady||!db){st.className="feedback bad";st.textContent="Firebase belum siap. Periksa konfigurasi Firebase pada file HTML.";return}
