@@ -21,6 +21,7 @@
 /* Soal kotak rahasia tampil sebagai modal di atas permainan pada HP, tablet, dan desktop. */
 #exam{backdrop-filter:none}
 body.question-modal-open{overflow:hidden;overscroll-behavior:none}
+#exam.question-modal-active::after{content:"";position:fixed;inset:0;background:rgba(1,8,20,.78);z-index:99990;pointer-events:none}
 .question-side.modal-open{
  position:fixed;z-index:99999;top:50%;left:50%;transform:translate(-50%,-50%);
  width:min(760px,calc(100vw - 28px));max-height:calc(100vh - 28px);max-height:calc(100dvh - 28px);
@@ -107,7 +108,7 @@ body.question-modal-open{overflow:hidden;overscroll-behavior:none}
 <div class="gamehead"><div class="zone"><div class="zoneicon" id="zoneIcon">🧭</div><div><small id="zoneLabel">LEVEL 1</small><h2 id="zoneName">Labirin Pilihan Ganda</h2></div></div><div class="stats"><div class="stat">⏱ <b id="timer">90:00</b></div><div class="stat">⭐ Skor <b id="score">0</b></div><div class="stat">📦 <b id="counter">0/20</b></div></div></div>
 <div class="progress"><div id="bar"></div></div>
 <div class="maze-layout"><div class="maze-side"><div class="maze-instructions"><b id="challengeTitle">Misi labirin</b><span id="challengeText">Temukan kotak rahasia.</span></div><div id="maze" class="maze"></div><div class="move-pad"><button class="move" data-move="up">▲</button><div><button class="move" data-move="left">◀</button><button class="move" data-move="down">▼</button><button class="move" data-move="right">▶</button></div></div><p class="note">Gerakkan penjelajah dengan tombol panah keyboard atau tombol arah. Dekati 📦 untuk membuka soal. <span id="soundStatus">🔊 Efek suara aktif</span></p></div>
-<div class="question-side"><div class="qmeta" id="qmeta">KOTAK RAHASIA</div><div id="question" class="question">Jelajahi labirin untuk menemukan kotak rahasia!</div><div id="answerArea"><div class="feedback">Setiap kotak menyimpan satu soal ujian.</div></div><div id="feedback" class="feedback hidden"></div><div class="actions"><span class="note" id="hint">Cari kotak rahasia.</span><button class="btn" id="next" disabled>Kunci jawaban & lanjut</button></div><button class="btn secondary" id="prev" style="margin-top:10px">Tutup soal</button></div></div>
+<div class="question-side" id="question-side"><div class="qmeta" id="qmeta">KOTAK RAHASIA</div><div id="question" class="question">Jelajahi labirin untuk menemukan kotak rahasia!</div><div id="answerArea"><div class="feedback">Setiap kotak menyimpan satu soal ujian.</div></div><div id="feedback" class="feedback hidden"></div><div class="actions"><span class="note" id="hint">Cari kotak rahasia.</span><button class="btn" id="next" disabled>Kunci jawaban & lanjut</button></div><button class="btn secondary" id="prev" style="margin-top:10px">Tutup soal</button></div></div>
 </section>
 <section id="finish" class="panel hidden" aria-hidden="true">
  <div class="eyebrow">Ekspedisi selesai</div><h1 style="margin:8px 0">Hebat, <span id="doneName" style="color:var(--gold)"></span>!</h1><p class="note">Semua jawaban telah direkap. Tekan tombol Simpan Nilai agar hasil ujian dikirim ke Firebase Cloud.</p>
@@ -256,7 +257,7 @@ function startEnemyMotion(){
   }else enemy.target=null;
  }
  enemyTimer=setInterval(()=>{
-  if($("exam").classList.contains("hidden")||questionOpen)return;
+  if($("exam").classList.contains("hidden"))return;
   const kind=LEVELS[activeLevel].kind;
   guardians.forEach(moveAlongLongRoute);
   if(kind==="guard")moveAlongLongRoute(guard);
@@ -264,7 +265,7 @@ function startEnemyMotion(){
   const hit=guardians.some(g=>g.r===player.r&&g.c===player.c)||
     (kind==="guard"&&guard.r===player.r&&guard.c===player.c)||
     (kind==="final"&&trap.r===player.r&&trap.c===player.c);
-  if(hit){
+  if(hit&&!questionOpen){
    player={r:1,c:1};soundHit();
    $("feedback").textContent="Awas! Penjaga berpatroli jauh menyusuri lorong dan menangkapmu. Kamu kembali ke pintu masuk!";
    $("feedback").classList.remove("hidden");
@@ -279,11 +280,13 @@ function makeMaze(){
  grid[9][9]=0;grid[10][9]=0;player={r:1,c:1};guard={r:9,c:9};trap={r:5,c:5};steps=0;let floors=[];
  for(let r=1;r<10;r++)for(let c=1;c<10;c++)if(grid[r][c]===0&&!(r===1&&c===1)&&!(r===9&&c===9))floors.push({r,c});
  shuffle(floors);let L=LEVELS[activeLevel];chests=floors.slice(0,L.to-L.from);opened=new Set();questionOpen=false;
+ const trapSpots=shuffle(floors.filter(p=>!chests.some(q=>q.r===p.r&&q.c===p.c)&&Math.abs(p.r-1)+Math.abs(p.c-1)>3&&Math.abs(p.r-9)+Math.abs(p.c-9)>2));
+ if(trapSpots.length)trap={...trapSpots[0]};
  const creatures=["🐍","🧟","🦂","🐊","🦇","🐺","🐗","🦖"];
- guardians=[];let used=new Set(["1,1","9,9","10,9",...chests.map(p=>`${p.r},${p.c}`)]);
+ guardians=[];let used=new Set(["1,1","9,9","10,9",`${trap.r},${trap.c}`,...chests.map(p=>`${p.r},${p.c}`)]);
  let candidates=shuffle(floors.filter(p=>Math.abs(p.r-1)+Math.abs(p.c-1)>3&&Math.abs(p.r-9)+Math.abs(p.c-9)>2));
  const guardCount=[3,5,6,8][activeLevel];
- for(const p of candidates){if(guardians.length>=guardCount)break;let nearChest=chests.some(q=>Math.abs(q.r-p.r)+Math.abs(q.c-p.c)===1);if(nearChest&&!used.has(`${p.r},${p.c}`)){guardians.push({...p,emoji:creatures[guardians.length%creatures.length]});used.add(`${p.r},${p.c}`)}}
+ for(const p of candidates){if(guardians.length>=guardCount)break;if(!used.has(`${p.r},${p.c}`)){guardians.push({...p,emoji:creatures[guardians.length%creatures.length]});used.add(`${p.r},${p.c}`)}}
 }
 function drawMaze(){
  const el=$("maze"),N=11,U=40,kind=LEVELS[activeLevel].kind;
@@ -317,7 +320,7 @@ function drawMaze(){
 function hasAnswer(i){let q=Q[i];return q.t==="pg"||q.t==="pgc"?(answers[i]||[]).length>0:String(answers[i]||"").trim().length>0}
 function renderQuestion(){
  // Tampilkan soal sebagai modal di atas seluruh area permainan.
- $("question-side").classList.add("modal-open");document.body.classList.add("question-modal-open");
+ $("question-side").classList.add("modal-open");$("exam").classList.add("question-modal-active");document.body.classList.add("question-modal-open");
  let q=Q[idx],L=LEVELS[activeLevel];$("zoneIcon").textContent=L.icon;$("zoneName").textContent=L.name;$("zoneLabel").textContent=L.title;$("qmeta").textContent="KOTAK RAHASIA "+(idx-L.from+1)+"/"+(L.to-L.from)+" • "+({pg:"PILIHAN GANDA",pgc:"PILIHAN GANDA KOMPLEKS",is:"ESAI SINGKAT",essay:"URAIAN"})[q.t];$("question").textContent=q.q;$("counter").textContent=opened.size+"/"+chests.length;$("bar").style.width=((idx+1)/40*100)+"%";$("feedback").classList.add("hidden");
  let area=$("answerArea");area.innerHTML="";
  if(q.t==="pg"||q.t==="pgc"){let opts=document.createElement("div");opts.className="options";q.o.forEach((v,i)=>{let b=document.createElement("button");b.className="opt";if((answers[idx]||[]).includes(i))b.classList.add("selected");b.innerHTML='<span class="letter">'+String.fromCharCode(65+i)+'</span><span></span>';b.querySelector("span:last-child").textContent=v;b.onclick=()=>{let a=answers[idx]||[];answers[idx]=q.t==="pg"?[i]:(a.includes(i)?a.filter(x=>x!==i):[...a,i]);renderQuestion()};opts.append(b)});area.append(opts)}
@@ -326,7 +329,7 @@ function renderQuestion(){
 }
 function render(){
  let L=LEVELS[activeLevel];$("challengeTitle").textContent=L.name;$("challengeText").textContent=L.desc;drawMaze();
- if(questionOpen)renderQuestion();else{$("question-side").classList.remove("modal-open");document.body.classList.remove("question-modal-open");$("zoneIcon").textContent=L.icon;$("zoneName").textContent=L.name;$("zoneLabel").textContent=L.title;$("qmeta").textContent="KOTAK RAHASIA • JELAJAHI LABIRIN";$("question").textContent="Gerakkan Mario melalui lorong, hindari penjaga, lalu dekati kotak 📦 untuk membuka soal!";$("answerArea").innerHTML='<div class="feedback">Setelah menjawab, kotak akan berubah menjadi ✓. Buka semua kotak lalu temukan pintu keluar 🏁.</div>';$("counter").textContent=opened.size+"/"+chests.length;$("hint").textContent="Gunakan tombol arah atau panah keyboard. Hindari 🐍 🧟 🦂 dan penjaga lainnya!";$("next").disabled=true;$("next").textContent="Cari kotak rahasia"}
+ if(questionOpen)renderQuestion();else{$("question-side").classList.remove("modal-open");$("exam").classList.remove("question-modal-active");document.body.classList.remove("question-modal-open");$("zoneIcon").textContent=L.icon;$("zoneName").textContent=L.name;$("zoneLabel").textContent=L.title;$("qmeta").textContent="KOTAK RAHASIA • JELAJAHI LABIRIN";$("question").textContent="Gerakkan Mario melalui lorong, hindari penjaga, lalu dekati kotak 📦 untuk membuka soal!";$("answerArea").innerHTML='<div class="feedback">Setelah menjawab, kotak akan berubah menjadi ✓. Buka semua kotak lalu temukan pintu keluar 🏁.</div>';$("counter").textContent=opened.size+"/"+chests.length;$("hint").textContent="Gunakan tombol arah atau panah keyboard. Hindari 🐍 🧟 🦂 dan penjaga lainnya!";$("next").disabled=true;$("next").textContent="Cari kotak rahasia"}
  $("prev").disabled=!questionOpen;updateScore()
 }
 function movePlayer(dr,dc){
@@ -347,7 +350,7 @@ $("next").onclick=unlockNext;$("prev").onclick=()=>{questionOpen=false;render()}
 document.querySelectorAll("[data-move]").forEach(b=>b.addEventListener("click",()=>{let d=b.dataset.move;movePlayer(d==="up"?-1:d==="down"?1:0,d==="left"?-1:d==="right"?1:0)}));
 $("soundStatus").style.cursor="pointer";$("soundStatus").title="Klik untuk mengaktifkan atau mematikan suara";$("soundStatus").onclick=()=>{soundEnabled=!soundEnabled;$("soundStatus").textContent=soundEnabled?"🔊 Efek suara aktif":"🔇 Efek suara mati";if(soundEnabled)soundSaved()};
 document.addEventListener("keydown",e=>{let m={ArrowUp:[-1,0],ArrowDown:[1,0],ArrowLeft:[0,-1],ArrowRight:[0,1]};if(m[e.key]){e.preventDefault();movePlayer(...m[e.key])}});
-function finish(){clearInterval(tick);if(enemyTimer)clearInterval(enemyTimer);soundLevel();let obj=0;Q.forEach((q,i)=>{if((q.t==="pg"||q.t==="pgc"||q.t==="is")&&isCorrect(i))obj+=2});show("finish");$("doneName").textContent=student;$("objScore").textContent=obj+"/70";$("percent").textContent=Math.round(obj/70*100)+"%";$("answered").textContent=answeredCount()+"/40";$("essayCount").textContent="5";window.examResult={student,kelas,objectiveScore:obj,objectiveMax:70,gameMode:"maze",levelsCompleted:4,answers,questions:Q.map((q,i)=>({number:i+1,type:q.t,question:q.q,options:q.o||[],answer:answers[i]??"",key:q.a||null,essayGuide:q.e||""})),startedAt:startAt,finishedAt:Date.now(),durationSeconds:Math.round((Date.now()-startAt)/1000),essayPending:true};}
+function finish(){clearInterval(tick);if(enemyTimer)clearInterval(enemyTimer);$("question-side").classList.remove("modal-open");$("exam").classList.remove("question-modal-active");document.body.classList.remove("question-modal-open");questionOpen=false;soundLevel();let obj=0;Q.forEach((q,i)=>{if((q.t==="pg"||q.t==="pgc"||q.t==="is")&&isCorrect(i))obj+=2});show("finish");$("doneName").textContent=student;$("objScore").textContent=obj+"/70";$("percent").textContent=Math.round(obj/70*100)+"%";$("answered").textContent=answeredCount()+"/40";$("essayCount").textContent="5";window.examResult={student,kelas,objectiveScore:obj,objectiveMax:70,gameMode:"maze",levelsCompleted:4,answers,questions:Q.map((q,i)=>({number:i+1,type:q.t,question:q.q,options:q.o||[],answer:answers[i]??"",key:q.a||null,essayGuide:q.e||""})),startedAt:startAt,finishedAt:Date.now(),durationSeconds:Math.round((Date.now()-startAt)/1000),essayPending:true};}
 $("review").onclick=()=>{show("exam");activeLevel=0;idx=0;makeMaze();questionOpen=true;renderQuestion();drawMaze()};
 $("save").onclick=async()=>{
  let st=$("saveStatus");st.classList.remove("hidden");
